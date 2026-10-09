@@ -22,7 +22,7 @@
 #   - pnpm (when on PATH), with the build approved: the same bin checks in a pnpm project.
 # Prints one line per check and ends with "npm-test: PASS" or "npm-test: FAIL (<n>)".
 set -uo pipefail
-repo=/home/theo/Code/sandbox/ts-rust
+repo=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
 usage() { sed -n '5,9p' "$0" >&2; exit 2; }
 name=typescript
 if [[ ${1:-} == --name ]]; then [[ $# -ge 2 ]] || usage; name=$2; shift 2; fi

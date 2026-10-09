@@ -7,8 +7,9 @@
 # Only the exit rule below differs.
 . "$(dirname "$(realpath "$0")")/exit-rule.sh" || exit 2
 [ -n "$1" ] || { echo "usage: $0 <round>" >&2; exit 2; }
-X=/home/theo/Code/sandbox/ts-rust/target/project-inputs-extra
-B=${GOPORT_BIN:-/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/bin/goport-r107}
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
+X=$REPO/target/project-inputs-extra
+B=${GOPORT_BIN:-$REPO/target/continuation-r97-goport/bin/goport-r107}
 # label|project dir|cwd (relative to project dir)|config (relative to cwd)|oracle file (relative to project dir)
 # Same cwd and -p as the saved oracle run, so paths in output match.
 # "~variant" labels are separate TS7-compatible configs outside src (see each manifest.json "variant").

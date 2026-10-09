@@ -15,12 +15,9 @@ use ts_goport::frontend::json::{UnmarshalerFrom, json_unmarshal};
 use ts_goport::frontend::tspath;
 
 /// Root of the temp directories when `TSCTEST_TMP` is not set.
-#[cfg(not(target_os = "macos"))]
-pub(crate) const DEFAULT_TMP_ROOT: &str =
-    "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/go-baseline-tests/tmp";
-/// macOS: `/home` is an autofs mount there, so the default is under /tmp.
-#[cfg(target_os = "macos")]
-pub(crate) const DEFAULT_TMP_ROOT: &str = "/tmp/ts-rust-go-baseline-tests/tmp";
+pub(crate) fn default_tmp_root() -> PathBuf {
+    std::env::temp_dir().join("ts-rust-go-baseline-tests/tmp")
+}
 
 // Go: jstest/node.go:16 loaderScript
 const LOADER_SCRIPT: &str = r#"import script from "./script.mjs";
@@ -182,7 +179,7 @@ impl TempDir {
     pub(crate) fn new() -> TempDir {
         static COUNTER: AtomicUsize = AtomicUsize::new(0);
         let root = std::env::var_os("TSCTEST_TMP")
-            .map_or_else(|| PathBuf::from(DEFAULT_TMP_ROOT), PathBuf::from);
+            .map_or_else(default_tmp_root, PathBuf::from);
         let dir = root.join(format!(
             "jstest-{}-{}",
             std::process::id(),

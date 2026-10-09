@@ -3,7 +3,7 @@
 #
 # usage: scripts/goport/build-goport-tests.sh <checkout> <testbin-dir>
 #
-# Builds like the candidate release bins (candidate.sh side): the default toolchain (TS_CARGO_NIGHTLY=0),
+# Builds like the release bins: the default toolchain (TS_CARGO_NIGHTLY=0),
 # no incremental cache, --release --locked, in the shared candidate target runtime/cargo-target (only for
 # the checker-port checkout; any other checkout builds in <checkout>/target/goport-tests) under the lock
 # /tmp/ts-rust-candidate-target.lock. The test binaries: the lib tests and every [[test]]
@@ -33,8 +33,7 @@ set -uo pipefail
 # One brace group: bash reads the whole script before it runs it, so an edit of this file does not
 # change a running build.
 {
-# Workspace members whose tests are not protected: the legacy stack (stages 2 and 3 of the legacy
-# removal delete it) and the tools (the codegen tools: see docs/goport-protected/README.md).
+# Workspace members whose tests are not protected: the legacy stack and the tools (the codegen tools).
 NOT_PROTECTED=(ts_binder ts_bundled ts_checker ts_cli ts_compiler ts_config ts_diagnostic_writer ts_evaluator
   ts_fswatch ts_glob ts_incremental ts_jsonrpc ts_lsp ts_module ts_options ts_outputpaths ts_parser
   ts_printer ts_project ts_semver ts_sourcemap ts_vfs ts_watch

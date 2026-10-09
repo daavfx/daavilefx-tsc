@@ -205,7 +205,7 @@ def step_typesyms(p, jobs):
 def pinned_copy(src, dest, p, extra=()):
     """Writes a copy of a prepare script with the pin's checkout and commits in place of the old pin's."""
     text = src.read_text()
-    pinned = {"go = Path('/home/theo/.explore/repos/microsoft__typescript-go')": f"go = Path({str(p.checkout)!r})",
+    pinned = {"go = Path('<go-checkout>')": f"go = Path({str(p.checkout)!r})",
               "GO_COMMIT = 'dc37b5249ab60e2bbce936f71b883e6c8136167e'": f"GO_COMMIT = {p.rec['commit']!r}",
               "TS_COMMIT = 'c3bd12d888b86f676718b16e64d7d2abcb423514'": f"TS_COMMIT = {p.rec.get('typescriptSubmodule')!r}",
               **dict(extra)}

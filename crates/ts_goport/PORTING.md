@@ -426,9 +426,9 @@ methods reach the AST through it.
 
 ## Program (owned by program.rs)
 
-`core::GoProgram` and `core::GoFile` are fixed. **Pending Theo's approval
+`core::GoProgram` and `core::GoFile` are fixed. **Open design decision
 (A1, multi-program plan):** this model replaces one program per process.
-The batch that adds it is not accepted until Theo approves.
+The change that adds it is not accepted until the maintainer approves the plan.
 
 - `GoProgram` is one program version (Go makes a new `Program` for each
   edit). It has an `id` (`core::next_program_id`), the file ids in Go order

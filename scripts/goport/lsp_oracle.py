@@ -19,7 +19,7 @@ Commands:
   replay       --trace FILE --server "CMD" [--verbose] [--simple | --super-simple]
   to-go-replay --trace FILE [--golden FILE] > x.jsonl
 
-Files under --out-root (default /home/theo/Code/sandbox/ts-rust/target/goport-lsp):
+Files under --out-root (default <repo>/target/goport-lsp):
   traces/<battery>/<trace>.jsonl[.gz]                      input (or --traces-dir)
   golden/<oracle-sha12>/<battery>/<trace>.golden.jsonl.gz  tsgo answers, frozen params
   golden/<oracle-sha12>/<battery>/<trace>.flaky.json       selfcheck result
@@ -90,9 +90,12 @@ FLAKY_FORMAT = "goport-lsp-flaky/1"
 RESULT_FORMAT = "goport-lsp-result/1"
 SUMMARY_FORMAT = "goport-lsp-summary/1"
 
-DEFAULT_OUT_ROOT = "/home/theo/Code/sandbox/ts-rust/target/goport-lsp"
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
+
+DEFAULT_OUT_ROOT = REPO + "/target/goport-lsp"
 DEFAULT_ORACLE = os.path.expanduser("~/.local/bin/tsgo-oracle")
-PROJECT_INPUTS = "/home/theo/Code/sandbox/ts-rust/target/project-inputs"
+PROJECT_INPUTS = REPO + "/target/project-inputs"
 
 # Go: lsp/replay_test.go:87 default placeholders.
 ROOT_DIR_PLACEHOLDER = "@PROJECT_ROOT@"

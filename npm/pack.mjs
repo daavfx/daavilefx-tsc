@@ -117,14 +117,14 @@ else {
     // PORT: the port's own package. The port is MIT. The JS launcher, the JS API and the lib files
     // are TypeScript's, unchanged (Apache-2.0). See portNotice below.
     input.license = "MIT AND Apache-2.0";
-    input.author = "Theo Browne";
+    input.author = "daavfx";
     input.description = "A Rust port of the TypeScript 7 compiler";
     input.keywords = ["typescript", "tsc", "compiler", "rust"];
     // npm trusted publishing (the release workflow) needs repository.url to name the repo that
     // publishes. The platform packages copy it.
-    input.homepage = "https://github.com/pingdotgg/ts-rust";
-    input.bugs = { url: "https://github.com/pingdotgg/ts-rust/issues" };
-    input.repository = { type: "git", url: "git+https://github.com/pingdotgg/ts-rust.git" };
+    input.homepage = "https://github.com/daavfx/daavilefx-tsc";
+    input.bugs = { url: "https://github.com/daavfx/daavilefx-tsc/issues" };
+    input.repository = { type: "git", url: "git+https://github.com/daavfx/daavilefx-tsc.git" };
 }
 delete input.scripts;
 delete input.devDependencies;

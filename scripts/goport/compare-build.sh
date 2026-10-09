@@ -24,10 +24,11 @@
 # masked), the set of output files written or touched (mtime changes), and
 # the full output tree (diff -r). Results: /tmp/goport-build/<repo>/seq/log.
 set -uo pipefail
+HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 # GOPORT_PIN=<key> runs this against that upstream pin (scripts/upstream/pin.py). Unset: no change.
-[[ -z ${GOPORT_PIN:-} || -n ${GOPORT_PIN_ACTIVE:-} ]] || exec python3 /home/theo/Code/sandbox/ts-rust/scripts/upstream/pin.py exec -- bash "$0" "$@"
+[[ -z ${GOPORT_PIN:-} || -n ${GOPORT_PIN_ACTIVE:-} ]] || exec python3 "$HERE/../../scripts/upstream/pin.py" exec -- bash "$0" "$@"
 
-REPO_ROOT=/home/theo/Code/sandbox/ts-rust
+REPO_ROOT=$(cd -- "$HERE/../.." && pwd)
 ORACLE=${ORACLE:-$HOME/.local/bin/tsgo-oracle}
 GOPORT=${GOPORT_BUILD:-$REPO_ROOT/target/continuation-r97-goport/runtime/cargo-bm-integ/release/goport_build}
 TIMEOUT=${TIMEOUT:-900}

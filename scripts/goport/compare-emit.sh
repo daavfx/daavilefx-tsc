@@ -12,8 +12,9 @@
 # project (all 45 at 16c25522e123) the lines are the same.
 set -uo pipefail
 bin="$(realpath "$1")"; label="$2"; filter="${3:-.}"
-P=/home/theo/Code/sandbox/ts-rust/target/project-inputs
-X=/home/theo/Code/sandbox/ts-rust/target/project-inputs-extra
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
+P=$REPO/target/project-inputs
+X=$REPO/target/project-inputs-extra
 ORACLE=~/.local/bin/tsgo-oracle
 OC=/tmp/goport-emit-oracle; OUT=/tmp/goport-emit-$label
 mkdir -p "$OC" "$OUT"

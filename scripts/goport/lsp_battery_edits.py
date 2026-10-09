@@ -50,7 +50,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path("/home/theo/Code/sandbox/ts-rust")
+REPO = Path(__file__).resolve().parent.parent.parent
 INPUTS = REPO / "target/project-inputs"
 LSP_BATTERY_PY = Path(os.environ.get(
     "LSP_BATTERY_PY", REPO / "target/worktrees/goport-int7/scripts/goport/lsp_battery.py"))

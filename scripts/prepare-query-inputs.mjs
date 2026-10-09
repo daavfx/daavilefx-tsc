@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
@@ -120,7 +121,7 @@ assert.equal(common.status, 0, common.stderr)
 const main = path.dirname(common.stdout.trim())
 const output = path.join(main, 'target/project-inputs/query')
 const source = path.join(output, 'source')
-const cache = process.env.QUERY_REPO_CACHE ?? '/home/theo/.explore/repos/TanStack__query'
+const cache = process.env.QUERY_REPO_CACHE ?? path.join(os.homedir(), '.explore/repos/TanStack__query')
 const metadata = path.join(output, 'metadata')
 const downloads = path.join(output, 'downloads')
 const tools = path.join(output, 'tools')

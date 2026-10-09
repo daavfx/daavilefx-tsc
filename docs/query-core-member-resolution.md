@@ -1,14 +1,8 @@
 # Query core member resolution
 
-Read [accountability](typechecker-accountability.md),
-[saved state](typechecker-state/current.json) and the
-[September 5 reset plan](typechecker-reset-plan.md) before using this record.
-The task instructions below are historical and do not authorize feature work.
-
 Updated 2026-09-04. Forty-three recent lost tests recovered. Eleven remain.
-Integration remains rejected.
-Root is the only implementer. One reviewer checks code changes. Use the existing
-`query-core-integration` branch. Do not start another feature branch.
+Integration remains rejected. Use the existing `query-core-integration`
+branch.
 
 ## Result required
 
@@ -29,7 +23,8 @@ has 6,319 passes and 418 failures across 6,737 tests. Compared with full-1,
 it retains all 6,278 previous passes, recovers 39 failures and adds two passing
 tests. Forty-three of the original 54 recent losses now pass. Eleven remain.
 Against the accepted compiler, 5,779 of 6,055 pass, 263 fail and 13 exact names
-are absent. No name is unrun. The batch is rejected. No expectation changed.
+are absent. No name is unrun. This candidate is not accepted. No expectation
+changed.
 The source is saved as signed checkpoint `cbc2649e7`, with separate public
 tests in `38dd63699`. The reference-flow draft is unchanged and unstaged.
 
@@ -115,11 +110,10 @@ Sixteen disjoint [accepted-loss audits](../target/query-core-accepted-failure-au
 account for all 286 full-1 losses against the accepted roster. Ten now pass.
 The remaining 263 failures and 13 absent names stay open. Source comparisons
 do not waive an entire test when a private branch remains unobserved.
-Nine more workers checked the next typeof operation, public controls, counts,
+Separate checks covered the next typeof operation, public controls, counts,
 session handling and the trace patch. The [type-query plan](query-core-type-query.md)
-records the next shared operation. Keep one production writer and one code
-reviewer. Give extra workers bounded source and evidence checks. Do not promote
-the checkpoint while any regression is unresolved.
+records the next shared operation. Do not promote the checkpoint while any
+regression is unresolved.
 
 ## What the source comparison established
 

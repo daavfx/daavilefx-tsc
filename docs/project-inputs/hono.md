@@ -7,16 +7,16 @@ build, TypeScript typecheck, Rust build, or Go oracle run was done.
 ## Prepared paths
 
 - Source and installed dependencies:
-  `/home/theo/Code/sandbox/ts-rust/target/project-inputs/hono/source`
+  `target/project-inputs/hono/source`
 - Fresh replay:
-  `/home/theo/Code/sandbox/ts-rust/target/project-inputs/hono/replay/source`
+  `target/project-inputs/hono/replay/source`
 - Evidence:
-  `/home/theo/Code/sandbox/ts-rust/target/project-inputs/hono/evidence`
+  `target/project-inputs/hono/evidence`
 
 The source is `honojs/hono` at commit
 `06880c4a2b04de9dd74217f26dd831209b9c01f1`, package version `4.13.5`.
-The cached checkout at `/home/theo/.explore/repos/honojs__hono` was clean before
-and after both runs. Its files and Git state were not changed.
+The cached checkout was clean before and after both runs. Its files and Git
+state were not changed.
 
 All 486 tracked files were copied with `git archive`. The script checked each
 copied file against its Git blob hash and executable bit before and after the
@@ -167,7 +167,7 @@ missing-path inventories match the original evidence byte-for-byte. The
 original prepared trees and evidence were not changed.
 
 The new proof is under
-`/home/theo/Code/sandbox/ts-rust/target/project-inputs/hono/path-repair-proof`.
+`target/project-inputs/hono/path-repair-proof`.
 Its `evidence/path-guard-tests.json`, `evidence/preparation.json`, and
 `evidence/original-comparison.json` record the repaired script hash shown above,
 the rejection tests, and the fresh preparation result.

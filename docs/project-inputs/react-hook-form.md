@@ -15,7 +15,7 @@ matches the clean cache checkout. Source, configs, and lockfiles were not patche
 The preparation directory is:
 
 ```text
-/home/theo/Code/sandbox/ts-rust/target/project-inputs/react-hook-form
+<repo>/target/project-inputs/react-hook-form
 ```
 
 All paths below are relative to that directory unless stated otherwise.
@@ -34,7 +34,7 @@ All paths below are relative to that directory unless stated otherwise.
 | Command output | `logs/` |
 
 The exploration cache remains clean at
-`/home/theo/.explore/repos/react-hook-form__react-hook-form`.
+`<checkout>/react-hook-form__react-hook-form`.
 No install or build ran there. The source copy retains the root MIT license
 and all other tracked files. Dependency packages retain their own files and
 license notices.
@@ -58,7 +58,7 @@ Both package installs used:
 
 ```sh
 pnpm install --frozen-lockfile --ignore-scripts --reporter=append-only \
-  --store-dir /home/theo/Code/sandbox/ts-rust/target/project-inputs/react-hook-form/pnpm-store \
+  --store-dir <repo>/target/project-inputs/react-hook-form/pnpm-store \
   --package-import-method=copy
 ```
 
@@ -242,8 +242,8 @@ scope, and a 1536 MiB Node heap. From the repair worktree, the command was:
 ```sh
 systemd-run --user --scope --quiet --collect \
   -p MemoryMax=2G -p MemorySwapMax=0 \
-  env RHF_TOOL_ARCHIVES=/home/theo/Code/sandbox/ts-rust/target/project-inputs/react-hook-form/tools \
-  TMPDIR=/home/theo/Code/sandbox/ts-rust/target/agent-worktrees/wave129/inputs-react-hook-form/target/safety-tests \
+  env RHF_TOOL_ARCHIVES=<repo>/target/project-inputs/react-hook-form/tools \
+  TMPDIR=<repo>/target/agent-worktrees/wave129/inputs-react-hook-form/target/safety-tests \
   NODE_OPTIONS=--max-old-space-size=1536 \
   node --test --test-concurrency=1 --test-reporter=tap \
   --test-reporter-destination=target/safety-tests/react-hook-form-safety.tap \
@@ -296,8 +296,8 @@ The command ran from the repair worktree:
 ```sh
 systemd-run --user --scope --quiet --collect \
   -p MemoryMax=2G -p MemorySwapMax=0 \
-  env RHF_TOOL_ARCHIVES=/home/theo/Code/sandbox/ts-rust/target/project-inputs/react-hook-form/tools \
-  TMPDIR=/home/theo/Code/sandbox/ts-rust/target/agent-worktrees/wave129/inputs-react-hook-form/target/safety-tests \
+  env RHF_TOOL_ARCHIVES=<repo>/target/project-inputs/react-hook-form/tools \
+  TMPDIR=<repo>/target/agent-worktrees/wave129/inputs-react-hook-form/target/safety-tests \
   NODE_OPTIONS=--max-old-space-size=1536 NODE_DISABLE_COMPILE_CACHE=1 \
   node --test --test-concurrency=1 --test-reporter=tap \
   --test-reporter-destination=target/safety-tests/react-hook-form-bootstrap-safety.tap \

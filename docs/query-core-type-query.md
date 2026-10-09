@@ -1,14 +1,7 @@
 # Query core type-query work
 
-Read [accountability](typechecker-accountability.md),
-[saved state](typechecker-state/current.json) and the
-[September 5 reset plan](typechecker-reset-plan.md) before using this record.
-The task instructions below are historical and do not authorize feature work.
-
 Updated 2026-09-04. Implementation has started. The operation is not complete.
-Use query-core-integration. Root owns production code, tests and the index.
-One reviewer checks the complete change. Other workers investigate bounded
-questions and write separate reports. Do not start another feature branch.
+Use query-core-integration.
 
 ## Namespace relation checkpoint
 
@@ -18,7 +11,7 @@ the live source query, the caller's session and checked source proofs. Pending
 overloads resolve once and retain their TypeId. Comparisons retain the complete
 ordered public call set. Type-only exports do not become value properties.
 
-The batch also completes the declared-type cache when a caller directly queries
+This change also completes the declared-type cache when a caller directly queries
 an ordinary type-literal alias body. The old path created the literal and its
 alias metadata but did not publish the alias's declared-type link. The fix uses
 the existing alias executor. It does not relax either property validator.
@@ -66,7 +59,7 @@ b38a26039de5f9a1e384f3bbdf8aff208878a9754f66d377eda9a822cf147fc1.
 The signed commit excludes that draft. This checkpoint does not promote a new
 accepted compiler. Full regression, Hono and corpus checks were not rerun.
 
-## Earlier overload relation batch
+## Earlier overload relation checkpoint
 
 Commit 65df0072a adds the real library ReturnType control. It first requests the
 pending global callable, then saves the alias result before a direct constraint
@@ -90,7 +83,7 @@ failures. The unit test target compiled. This is not complete overload relation
 support. The [unchanged Query run](../target/query-core-namespace-export-proof-query-1-result.md)
 has the same 244 checking records, including the same diagnostics and stopping
 point. Ordinary checking is incomplete. Two of 23 isolated roots complete.
-This batch has no Query completion improvement and is not a compiler promotion.
+This change has no Query completion improvement and is not a compiler promotion.
 
 The [pinned Go baseline](../target/query-core-overload-relation-go-controls-1/result.md)
 accepts the ReturnType consumer but reports four declaration errors in each
@@ -255,7 +248,6 @@ Parallel reports also cover [call demand](../target/query-core-pending-overload-
 [qualified lookup](../target/query-core-pending-overload-qualified-query.md),
 [recursive state](../target/query-core-pending-overload-recursion.md) and
 [display](../target/query-core-pending-overload-display-api.md).
-Root remains the sole code and test writer. One reviewer checks integration.
 
 ## Retained regressions and build cost
 
@@ -341,7 +333,7 @@ session. A reset flag alone is not sufficient.
 General inferred-variable typeof, forward references, flow narrowing and
 fresh-literal normalization are separate known gaps. The observed Query error
 does not reach those branches. Keep them in the remaining port plan. Do not
-combine them with this batch unless the actual callable operation requires it.
+them with this work unless the actual callable operation requires it.
 
 ## Focused controls
 
@@ -391,11 +383,11 @@ source fingerprint is
 8f6d68eee8668cde06f0f508434bac80b0c0c34f4ae7e6835968063a939b1542.
 All prior passes must remain. The accepted roster still has 263 failures and
 13 absent names. Eleven of the 54 recent losses remain. No expectation change
-or promotion is approved by this plan. Run the previously accepted corpus
+or promotion follows from this plan. Run the previously accepted corpus
 selections before promotion. Hono remains a periodic cross-project check.
 
-After two batches without useful Query progress, recheck the shared demand
-path. Do not add workers or another cache exception as the default response.
+After two measured attempts without useful Query progress, recheck the shared
+demand path. Do not add another cache exception as the default response.
 The project milestone remains complete Query diagnostics matching Go, plus
 the correct deliberate type error in a separate copy.
 

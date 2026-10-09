@@ -4,11 +4,13 @@
 #
 # usage: rerecord.sh <key> [host] [steps]
 #   key    pin key in UPSTREAM.json (scripts/upstream/pin.py)
-#   host   alvin (default), dbook-lan, cup2, or local (run the host steps on this machine)
+#   host   local (default: run the host steps on this machine). Remote hosts
+#          need their own runner setup; the remote-host path calls
+#          scripts/goport/remote.sh, which this fork does not carry.
 #   steps  comma list; default all, in this order:
-#     prep      zbook: corpus-full and the corpus-int3 1,500-case shard from the pin's test cases, the
+#     prep      build the corpus-full and the corpus-int3 1,500-case shard from the pin's test cases, the
 #               typesyms dumper and the Go dumps of query, hono and effect (record.py corpus, typesyms)
-#     sync      zbook: remote.sh sync-pin and sync-scripts, and the LS and API trace dirs
+#     sync      sync the pin and scripts, and the LS and API trace dirs (needs remote.sh)
 #     projects  host: saved oracle outputs of the gate project checks (record.py projects)
 #     f1        host: conformance sample oracle outputs (record.py f1)
 #     sweep     host: oracle-sweep/, with the existing tools-port/sweep.sh and sweep-hono-runtime.sh
@@ -16,7 +18,7 @@
 #     ls        host: LS goldens, with the existing lsp_oracle.py: record, then selfcheck --runs 2 twice
 #     api       host: API goldens, with scripts/goport/api_oracle.py: record, then selfcheck --runs 2. The pin's
 #               traces must exist (api_oracle.py build under GOPORT_PIN; a later pin speaks protocol 2)
-#     fetch     zbook: copy the pin root and the new golden dirs back from the host
+#     fetch     copy the pin root and the new golden dirs back from the host (needs remote.sh)
 # Host steps run with nice 15 under GOPORT_PIN=<key>, so the existing recorders use the pin oracle and
 # write into the pin's dirs (pin.py exec). remote.sh run holds the host lock for them. The goport side of sweep and emit
 # runs /usr/bin/true: only the oracle side is wanted. LS and API goldens go to
@@ -24,12 +26,12 @@
 # For the current pin, only prep, sync, projects, f1 and fetch run: they write a fresh copy under the
 # pin root that can be compared with the default caches. Logs: <pin root>/rerecord/<step>.log.
 set -uo pipefail
-REPO=/home/theo/Code/sandbox/ts-rust
+REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 R=$REPO/target/continuation-r97-goport
 PIN=$REPO/scripts/upstream/pin.py
 [[ $# -ge 1 && $1 != -* ]] || { sed -n '2,27p' "$0"; exit 2; }
 KEY=$(GOPORT_PIN=$1 python3 "$PIN" show | python3 -c 'import json,sys; print(json.load(sys.stdin)["key"])') || exit 2
-HOST=${2:-alvin}
+HOST=${2:-local}
 STEPS=${3:-prep,sync,projects,f1,sweep,emit,ls,api,fetch}
 CURRENT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["current"])' "$REPO/UPSTREAM.json")
 ROOT=$(python3 "$PIN" path root "$KEY")

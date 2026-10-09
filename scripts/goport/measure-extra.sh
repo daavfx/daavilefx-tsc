@@ -1,6 +1,6 @@
 #!/bin/bash
 # usage: measure-extra.sh <round>. Runs goport on extra real projects and diffs against oracle.
-cd /home/theo/Code/sandbox/ts-rust
+cd "$(dirname "$(realpath "$0")")/../.."
 B=${GOPORT_BIN:-target/continuation-r97-goport/runtime/cargo-target/release/goport}
 O=target/continuation-r97-goport/measure/$1; mkdir -p $O
 for pair in "zod:target/project-inputs/zod/source/packages/zod/tsconfig.json" "ts-pattern:target/project-inputs/ts-pattern/source/tsconfig.json" "rhf:target/project-inputs/react-hook-form/source/tsconfig.json"; do

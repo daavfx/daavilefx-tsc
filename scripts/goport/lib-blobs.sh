@@ -7,7 +7,7 @@
 #
 # usage: lib-blobs.sh stale [<rev>]   git only, no build. At <rev> (default HEAD) of this repo: each blob whose key
 #                                     sources changed after the last commit that wrote it. One line per stale blob;
-#                                     exit 1 when one is stale. candidate.sh check runs it.
+#                                     exit 1 when one is stale. Run it before a merge.
 #        lib-blobs.sh write           in the current checkout: write lib_parse.bin, then lib_bind.bin, then check.
 #        lib-blobs.sh check           in the current checkout: the two snapshot_matches_live_* tests (a release test
 #                                     build). They also find a blob that a helper outside the key made stale.

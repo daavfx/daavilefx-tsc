@@ -476,7 +476,7 @@ const MAX_EMIT_THREADS: usize = 32;
 // 1.25% less wall time than 32 (-7 to -9 ms, peak RSS -29 MiB); the 32
 // pool threads shared cores and L3 with the checkers. At 16 threads on 16
 // cores 12 was neutral, so the rule leaves CPUs without siblings alone.
-// perf10 found a pool of 4 17 ms faster on mini-743d (16 threads, 8 cores).
+// perf10 found a pool of 4 17 ms faster on the upstream timing host (16 threads, 8 cores).
 fn emit_thread_count() -> usize {
     // wasm has one thread.
     if cfg!(target_family = "wasm") {
@@ -1981,7 +1981,7 @@ impl ThreadBudget {
     // check mode): at 32 threads on 16 cores, 15 parse workers
     // (`GOPORT_PARSE_THREADS=15`) cut effect's parse from 38 to 31 ms and 16
     // bind threads its changes step from 20 to 16 ms (wall -6 to -10 ms).
-    // At 16 threads on 8 cores (mini-743d) more threads gave nothing, so the
+    // At 16 threads on 8 cores (upstream timing host) more threads gave nothing, so the
     // rule counts physical cores. Query is not a large load.
     // PERF (perf11 Q12, qprof `knobs2`, dbook, 60 rounds, env-only on the
     // perf10 release tsgo): the glibc arena locks of perf9 round 2 do not

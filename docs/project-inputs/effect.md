@@ -9,15 +9,15 @@ a complete manifest, or a parity result.
 - Repository: `Effect-TS/effect`.
 - Commit: `0d083ba26b2e1afec8d3e8d83db0d05683b6602b`.
 - Package: `effect@4.0.0-rc.112`.
-- Source: `/home/theo/Code/sandbox/ts-rust/target/project-inputs/effect/source`.
+- Source: `target/project-inputs/effect/source`.
 - Config: `packages/effect/tsconfig.json`.
-- Evidence: `/home/theo/Code/sandbox/ts-rust/target/project-inputs/effect/evidence`.
+- Evidence: `target/project-inputs/effect/evidence`.
 
 The script copied the complete tracked tree with `git archive`. It checked
 all 3,598 files against their pinned Git blob IDs and executable bits before
 and after each install. The source contains 38,977,779 bytes. No tracked file
 changed, and no file was added outside `node_modules`. The cached checkout
-at `~/.explore/repos/Effect-TS__effect` remained clean at the same commit.
+remained clean at the same commit.
 
 The exact config still extends `tsconfig.base.json` and includes `src`.
 It retains `types: ["node"]`, strict mode, NodeNext, ES2022, exact optional
@@ -26,7 +26,7 @@ properties, erasable syntax, relative import extension rewriting,
 The script does not set `moduleResolution` or replace any option.
 
 TypeScript 6.0.3 read the config only. It selected the same 457 roots as the
-[original inventory](../typechecker-modern-project-inputs.md). Their sorted
+original inventory. Their sorted
 path list has SHA-256
 `ef2b0b9eed5911a73e1ed0c29a7945687869473b4ee7f6009de658600095ff3b`.
 No TypeScript or Go project check ran.

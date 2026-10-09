@@ -1,6 +1,6 @@
 #!/bin/bash
 # usage: measure.sh <round>
-cd /home/theo/Code/sandbox/ts-rust
+cd "$(dirname "$(realpath "$0")")/../.."
 B=${GOPORT_BIN:-target/continuation-r97-goport/runtime/cargo-target/release/goport}
 O=target/continuation-r97-goport/measure/$1; mkdir -p $O
 run() { n=$1; c=$2

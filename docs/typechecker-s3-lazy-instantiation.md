@@ -6,9 +6,7 @@
 - Upstream epoch: `dc37b5249ab60e2bbce936f71b883e6c8136167e`
 - Rejected draft branch: `agent/w0-s3b-session` through `f11eb00`
 
-This document freezes the next S3 implementation boundary. It supplements
-[`typechecker-completion-goal.md`](typechecker-completion-goal.md) and the live
-[`typechecker-wave0-status.md`](typechecker-wave0-status.md) ledger.
+This document freezes the next S3 implementation boundary.
 
 ## Decision
 

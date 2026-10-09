@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Cargo for this repo with caps: TS_CARGO_SLOTS Cargo runs at a time across all worktrees (2 on zbook), a memory
+# Cargo for this repo with caps: TS_CARGO_SLOTS Cargo runs at a time across all worktrees (2 on a big host), a memory
 # limit, and each worktree's own target dir.
 # usage: scripts/run-cargo-capped.sh <cargo command> [args...]   e.g. build --release -p ts_goport --bins
 #        scripts/run-cargo-capped.sh help                       this text
 # - Target: <worktree>/target, with sccache when installed. Do not set CARGO_TARGET_DIR (TS_CARGO_SEPARATE_TARGET=1
 #   with its own CARGO_TARGET_DIR only for a deliberate fresh-target reproduction).
-# - TS_CARGO_JOBS: build jobs (16 on zbook, 1 elsewhere). TS_CARGO_MEMORY_LIMIT_KIB: the memory cap of the run.
-# - TS_CARGO_SLOTS: Cargo runs at a time (2 on zbook, 1 elsewhere). A run takes the first free slot lock
+# - TS_CARGO_JOBS: build jobs (16 on a big host, 1 elsewhere). TS_CARGO_MEMORY_LIMIT_KIB: the memory cap of the run.
+# - TS_CARGO_SLOTS: Cargo runs at a time (2 on a big host, 1 elsewhere). A run takes the first free slot lock
 #   (/tmp/ts-rust-cargo-<id>.lock, then <id>-1.lock, ...); slot 0 keeps the old single-lock name.
 # - Edit-loop builds (build, check, test, run, bench without --profile goport) use nightly -Zthreads=8 and
 #   incremental ts_goport. TS_CARGO_NIGHTLY=0 TS_CARGO_INCREMENTAL=0 gives a stable build (for timing, or after an
@@ -20,12 +20,16 @@ case "${1:-}" in help | -h | --help) sed -n '2,/^set -euo/p' "$0" | sed '$d'; ex
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd -- "${script_dir}/.." && pwd)"
 
-# Build jobs. TS_CARGO_JOBS overrides the per-host default: 16 on zbook (32
-# cores, 94 GB), 1 elsewhere. Tests keep one thread either way.
-case "$(hostname)" in
-  zbook) default_jobs=16 ;;
-  *) default_jobs=1 ;;
-esac
+# A big host: the cores and the memory for the wide defaults below. TS_CARGO_JOBS and TS_CARGO_SLOTS
+# name the values on any host.
+cores="$(nproc 2>/dev/null || echo 1)"
+mem_kib="$(awk '/^MemTotal:/ { print $2; exit }' /proc/meminfo 2>/dev/null || echo 0)"
+big_host=0
+if ((cores >= 16 && mem_kib >= 32 * 1024 * 1024)); then big_host=1; fi
+
+# Build jobs. TS_CARGO_JOBS overrides the per-host default: 16 on a big host, 1
+# elsewhere. Tests keep one thread either way.
+if ((big_host)); then default_jobs=16; else default_jobs=1; fi
 jobs="${TS_CARGO_JOBS:-$default_jobs}"
 if [[ ! "$jobs" =~ ^[1-9][0-9]*$ ]]; then
   echo "TS_CARGO_JOBS must be a positive integer" >&2
@@ -97,15 +101,12 @@ if [[ -n "${CARGO_TARGET_DIR:-}" && "${TS_CARGO_SEPARATE_TARGET:-0}" != 1 &&
 fi
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$default_target_dir}"
 
-# TS_CARGO_SLOTS Cargo runs at a time across all worktrees (2 on zbook, 1
-# elsewhere): one lock file per slot, and slot 0 keeps the old lock name. From
-# 2026-10-01 to 10-03 one slot made builds wait 1.9 min on average (p90 6.4 min)
-# behind 20-minute PGO builds, while the long ts_goport rustc step uses 8 of
-# zbook's 32 threads and no Cargo scope peaked above 11.6 GB of its 94 GB.
-case "$(hostname)" in
-  zbook) default_slots=2 ;;
-  *) default_slots=1 ;;
-esac
+# TS_CARGO_SLOTS Cargo runs at a time across all worktrees (2 on a big host, 1
+# elsewhere): one lock file per slot, and slot 0 keeps the old lock name. With
+# one slot a build waits behind a 20-minute PGO build, while the long ts_goport
+# rustc step uses 8 threads and no capped scope peaked above a third of the
+# host's memory.
+if ((big_host)); then default_slots=2; else default_slots=1; fi
 slots="${TS_CARGO_SLOTS:-$default_slots}"
 if [[ ! "$slots" =~ ^[1-9][0-9]*$ ]]; then
   echo "TS_CARGO_SLOTS must be a positive integer" >&2
@@ -141,7 +142,7 @@ if ((jobs == 1)); then
 fi
 
 # Edit-loop builds (build, check, test, run, bench) use a pinned nightly with the
-# parallel frontend, and build ts_goport incrementally. On dbook-lan a ts_goport
+# parallel frontend, and build ts_goport incrementally. On a big host a ts_goport
 # rebuild took 75 s on 1.93.0 and 43 s on the nightly with -Zthreads=8, and a
 # one-line edit 32 s with incremental. Program output and the quick gate were
 # equal (target/continuation-r97-goport/buildspeed/bench.md).

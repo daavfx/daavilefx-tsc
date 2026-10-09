@@ -276,18 +276,15 @@ pub struct TempDir {
     path: PathBuf,
 }
 
-#[cfg(not(target_os = "macos"))]
-const DEFAULT_TMP: &str =
-    "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/go-baseline-tests/tmp";
-/// macOS: `/home` is an autofs mount there, so the default is under /tmp.
-#[cfg(target_os = "macos")]
-const DEFAULT_TMP: &str = "/tmp/ts-rust-go-baseline-tests/tmp";
+fn default_tmp() -> PathBuf {
+    std::env::temp_dir().join("ts-rust-go-baseline-tests/tmp")
+}
 
 impl TempDir {
     pub fn new() -> TempDir {
         static COUNTER: AtomicUsize = AtomicUsize::new(0);
         let root = std::env::var_os("TSCTEST_TMP")
-            .map_or_else(|| PathBuf::from(DEFAULT_TMP), PathBuf::from);
+            .map_or_else(default_tmp, PathBuf::from);
         let path = root.join(format!(
             "tsoptions-{}-{}",
             std::process::id(),

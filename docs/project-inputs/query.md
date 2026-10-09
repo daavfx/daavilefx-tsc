@@ -10,13 +10,13 @@ compiler pass or a ready conformance ring. No Rust check or Go oracle was run.
 - Script: `scripts/prepare-query-inputs.mjs`.
 
 The prepared source is
-`/home/theo/Code/sandbox/ts-rust/target/project-inputs/query/source`.
+`target/project-inputs/query/source`.
 The report and command logs are in the sibling `metadata` and `logs` directories.
 The cache checkout remains clean at the same pin. No upstream source or config
 was changed.
 
 The script preserves the five production configs and the independent NodeNext
-consumer listed in `docs/typechecker-modern-project-inputs.md`. It checks their
+consumer. It checks their
 original root-list digests. It does not add exclusions or change compiler options.
 
 ## Config inputs

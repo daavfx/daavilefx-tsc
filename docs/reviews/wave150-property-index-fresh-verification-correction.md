@@ -22,7 +22,7 @@ test and Clippy results remain unaccepted despite matching the new results.
 ## Fixed source
 
 Worktree:
-`/home/theo/Code/sandbox/ts-rust/target/agent-worktrees/wave150/property-index-root-composition`.
+`<repo>/target/agent-worktrees/wave150/property-index-root-composition`.
 
 Implementation: `ce5c1451f1584cb1b351507500e6357e0f5c2acb`.
 Tested HEAD: `932698e518ed2a6bdd9f9dc911429ebbc9a63f90`.
@@ -49,7 +49,7 @@ Clippy reused only artifacts built from this physical worktree in the new
 target during this correction.
 
 Both commands used the absolute original root runner
-`/home/theo/Code/sandbox/ts-rust/scripts/run-cargo-capped.sh` and the absolute
+`<repo>/scripts/run-cargo-capped.sh` and the absolute
 worktree `Cargo.toml`. Their selections were:
 
 ```text
@@ -61,7 +61,7 @@ Verbose mode records compiler commands. It does not change the test selection
 or lint levels. `CARGO_TARGET_DIR` was the absolute fresh target above.
 `TS_CARGO_MEMORY_LIMIT_KIB=16777216` set the 16 GiB memory cap.
 `prlimit --stack=16777216:16777216` and `RUST_MIN_STACK=16777216` set 16 MiB
-stacks. `TS_GO_REPO=/home/theo/.explore/repos/microsoft__typescript-go` was
+stacks. `TS_GO_REPO=<checkout>/microsoft__typescript-go` was
 unchanged. The original common lock was used. `TMPDIR` and `TS_CARGO_LOCK_ID`
 remained unset. No valid queue wait was canceled or bypassed.
 

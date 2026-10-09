@@ -125,11 +125,11 @@ existing quote controls also pass. The one new ownership rejection fails as
 described above. The copied combined log contains 18 test-target summaries,
 with 4411 passes and one failure.
 
-The invariant worker already queued a separate four-flag scope probe in
-session `29338`. It covers a hidden renamed alias, a type-only shadow, a
-distinct wrapper using the original alias spelling, shared bare defaults,
-and no-location replay. This worker did not duplicate that test or root's
-combined gate. No new Rust runtime result is claimed here for `3a336ec7`.
+A separate four-flag scope probe was already queued in session `29338`. It
+covers a hidden renamed alias, a type-only shadow, a distinct wrapper using
+the original alias spelling, shared bare defaults, and no-location replay. It
+did not duplicate that test or root's combined gate. No new Rust runtime
+result is claimed here for `3a336ec7`.
 
 ## Remaining scope
 
@@ -151,7 +151,7 @@ full project parity, or primary promotion. It contains no production edit.
 Worktree:
 
 ```text
-/home/theo/Code/sandbox/ts-rust/target/agent-worktrees/wave147/namespace-alias-view-semantics
+target/agent-worktrees/wave147/namespace-alias-view-semantics
 ```
 
 Preserved local logs under this worktree:
@@ -165,7 +165,7 @@ Retained Go evidence is under the prior worktree's
 `target/review/flags/attempt-1/`:
 
 ```text
-/home/theo/Code/sandbox/ts-rust/target/agent-worktrees/wave146/namespace-cross-context-final-semantics
+target/agent-worktrees/wave146/namespace-cross-context-final-semantics
 ```
 
 | File | SHA-256 |

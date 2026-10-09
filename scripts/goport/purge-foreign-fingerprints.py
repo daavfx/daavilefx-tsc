@@ -10,16 +10,33 @@ try 1: goport_util built from goport-legacy1). A fingerprint dir whose dep-info 
 repository (the main checkout or any worktree) but outside <checkout> is removed, so cargo builds that unit
 again. Registry and git sources do not count. Prints one line per removed dir and a count.
 """
-import os, re, shutil, sys
+import os, re, shutil, subprocess, sys
 
-ROOT = '/home/theo/Code/sandbox/ts-rust/'
+ROOT_ENV = 'PURGE_REPO_ROOT'
 PATH = re.compile(rb'/[\x21-\x7e]+')
+
+
+def main_repo_root(checkout):
+    """The main checkout: the git common dir of <checkout>, else <checkout>."""
+    if ROOT_ENV in os.environ:
+        return os.environ[ROOT_ENV]
+    try:
+        out = subprocess.run(['git', '-C', checkout, 'rev-parse',
+                              '--path-format=absolute', '--git-common-dir'],
+                             capture_output=True, text=True, check=True)
+        common = out.stdout.strip()
+        if common:
+            return os.path.dirname(common) + '/'
+    except Exception:
+        pass
+    return checkout
 
 
 def main():
     if len(sys.argv) != 3:
         sys.exit(__doc__)
     target, checkout = sys.argv[1], os.path.realpath(sys.argv[2]) + '/'
+    root = main_repo_root(checkout)
     removed = 0
     for profile in ('release', 'debug'):
         fp = os.path.join(target, profile, '.fingerprint')
@@ -34,7 +51,7 @@ def main():
                 with open(os.path.join(d, f), 'rb') as h:
                     for m in PATH.finditer(h.read()):
                         p = m.group().decode('ascii', 'replace')
-                        if p.startswith(ROOT) and not p.startswith(checkout) and '/registry/' not in p and '/git/checkouts/' not in p:
+                        if p.startswith(root) and not p.startswith(checkout) and '/registry/' not in p and '/git/checkouts/' not in p:
                             foreign = p
                             break
                 if foreign:

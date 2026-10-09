@@ -1219,7 +1219,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === script) {
     process.env.ZOD_INPUT_OUT ?? path.join(main, "target/project-inputs/zod"),
   );
   const cache = realpathSync.native(
-    process.env.ZOD_REPO_CACHE ?? "/home/theo/.explore/repos/colinhacks__zod",
+    process.env.ZOD_REPO_CACHE ?? path.join(os.homedir(), ".explore/repos/colinhacks__zod"),
   );
   const preparation = createPreparation(output, cache);
   const result = await preparation[action]();

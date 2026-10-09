@@ -7,20 +7,22 @@
 #   1. publishes a 0.0.0-placeholder version when the package is not on npm yet: npm can only
 #      trust a workflow for a package that exists. The release workflow refuses 0.0.x tags, so a
 #      release never collides with a placeholder (tsc-rs has a 0.0.1 placeholder).
-#   2. trusts .github/workflows/release.yml of pingdotgg/ts-rust in the environment `npm` to
+#   2. trusts .github/workflows/release.yml of daavfx/daavilefx-tsc in the environment `npm` to
 #      publish it. When the package already trusts something else, it stops and prints the
 #      revoke command (it does not revoke by itself).
 # npm drops a new trust that publishes nothing in 2 days. So run this shortly before the first tag.
 # The first publish binds a trust to the repo's GitHub ID, not only its name. After the repo is
-# recreated, run it with --relink: it revokes every trust of each package first. The 2026-10-07
-# recreation needs no relink: v0.1.0 already published from the new repo.
+# recreated, run it with --relink: it revokes every trust of each package first.
+# Upstream (pingdotgg/ts-rust) already published tsc-rs and its platform packages, and npm trusts
+# that repo's workflow for them: on such a package this script stops with the revoke command, so
+# the trust has to be moved here before a tag.
 #
 # usage: npm/trust-setup.sh [--relink]    needs npm 11.15.0 or later (npm trust)
 set -euo pipefail
-[[ ${1:-} != help ]] || { sed -n '2,18p' "$0" >&2; exit 2; }
+[[ ${1:-} != help ]] || { sed -n '2,20p' "$0" >&2; exit 2; }
 relink=0
 [[ ${1:-} != --relink ]] || relink=1
-repo=pingdotgg/ts-rust
+repo=daavfx/daavilefx-tsc
 packages=(tsc-rs @tsc-rs/linux-x64 @tsc-rs/linux-arm64 @tsc-rs/darwin-arm64)
 
 npm_version=$(npm --version)

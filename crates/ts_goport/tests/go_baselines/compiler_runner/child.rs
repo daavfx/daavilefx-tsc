@@ -74,12 +74,9 @@ const TIMEOUT_VAR: &str = "TIMEOUT";
 const RESULTS_VAR: &str = "RESULTS";
 const TMP_ENV: &str = "COMPILER_RUNNER_TMP";
 const KEEP_ENV: &str = "COMPILER_RUNNER_KEEP";
-#[cfg(not(target_os = "macos"))]
-const DEFAULT_TMP: &str =
-    "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/tests2/S1/tmp";
-/// macOS: `/home` is an autofs mount there, so the default is under /tmp.
-#[cfg(target_os = "macos")]
-const DEFAULT_TMP: &str = "/tmp/ts-rust-go-baseline-tests/S1/tmp";
+fn default_tmp() -> PathBuf {
+    std::env::temp_dir().join("ts-rust-go-baseline-tests/S1/tmp")
+}
 const DEFAULT_JOBS: usize = 4;
 const DEFAULT_TIMEOUT_SECS: u64 = 600;
 /// The stack of the compile thread in a child, as the bins use.
@@ -258,7 +255,7 @@ struct CaseResult {
 fn tmp_dir() -> PathBuf {
     match std::env::var_os(TMP_ENV) {
         Some(dir) if !dir.is_empty() => PathBuf::from(dir),
-        _ => PathBuf::from(DEFAULT_TMP),
+        _ => default_tmp(),
     }
 }
 

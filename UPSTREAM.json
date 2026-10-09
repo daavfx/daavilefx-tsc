@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "about": "Upstream typescript-go pins for ts_goport. The default paths hold the current pin. GOPORT_PIN=<key> selects another pin per run (scripts/upstream/pin.py). See UPSTREAM.md.",
-  "current": "dc37b5249ab6",
+  "about": "Upstream typescript-go pins for ts_goport. The default paths hold the current pin. GOPORT_PIN=<key> selects another pin per run (scripts/upstream/pin.py). See UPSTREAM.md. The current pin is microsoft/TypeScript 673a5f17d713, the Go module under tsc/ (TypeScript 7.1.0-dev); the microsoft/typescript-go pins are history and stay selectable.",
+  "current": "673a5f17d713",
   "selector": "GOPORT_PIN",
-  "pinRoot": "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/pins",
+  "pinRoot": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\pins",
   "defaults": {
-    "oracle": "/home/theo/.local/bin/tsgo-oracle",
-    "goCheckout": "/home/theo/.explore/repos/microsoft__typescript-go"
+    "oracle": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\oracle\\tsgo-oracle.exe",
+    "goCheckout": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\checkouts\\microsoft__typescript-go"
   },
   "caches": [
     "target/continuation-r97-goport/oracle/",
@@ -43,15 +43,15 @@
         "note": "tree-identical: 4d44e1c49:tsc = dc37b5249^{tree} = 28c6ac19a"
       },
       "typescriptSubmodule": "c3bd12d888b86f676718b16e64d7d2abcb423514",
-      "goCheckout": "/home/theo/.explore/repos/microsoft__typescript-go",
+      "goCheckout": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\checkouts\\microsoft__typescript-go",
       "oracle": {
-        "path": "/home/theo/.local/bin/tsgo-oracle",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\oracle\\tsgo-oracle.exe",
         "sha256": "204f15c767025fc9238b748399be7d1293f6d0f8ea9ddec8eab65995ecf4bb39",
         "go": "go1.26.4",
         "build": "CGO_ENABLED=0 GOAMD64=v1 go build ./cmd/tsgo"
       },
       "typesymDumper": {
-        "path": "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/typesyms/typesymdump-go",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\typesyms\\typesymdump-go.exe",
         "sha256": "98070855cd3c15cfdfffa97c8c145c9f3fb23e770b87c36e7d42a2976531dff6",
         "go": "go1.26.8"
       }
@@ -68,16 +68,16 @@
         "note": "tree-identical: a5a219c3b:tsc = 52168999f^{tree} = 0b7946b32. Tag v7.0.2 is this content plus the version string (core/version.go, Herebyfile.mjs)."
       },
       "typescriptSubmodule": "4d4f005c8541e0255a9d8791205fdce326e462bc",
-      "goCheckout": "/home/theo/.explore/repos/microsoft__typescript-go@52168999f",
+      "goCheckout": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\checkouts\\microsoft__typescript-go@52168999f",
       "oracle": {
-        "path": "/home/theo/.local/bin/tsgo-oracle-52168999f3dc",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\oracle\\tsgo-oracle-52168999f3dc.exe",
         "sha256": "d2dc9ff46ff560de18537cec05122076557844e88b9189711764f45b2bb04c52",
         "go": "go1.26.4",
         "version": "Version 7.1.0-dev",
         "build": "CGO_ENABLED=0 GOAMD64=v1 go build ./cmd/tsgo"
       },
       "typesymDumper": {
-        "path": "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/pins/52168999f3dc/target/continuation-r97-goport/typesyms/typesymdump-go",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\pins\\52168999f3dc\\target\\continuation-r97-goport\\typesyms\\typesymdump-go.exe",
         "sha256": "1a87ad326554f80e46a7b96470affe0d368fc3ac51b46c59001ad193822e9d97",
         "go": "go1.26.8",
         "build": "scripts/upstream/record.py typesyms (go build -overlay with typesyms/tools/typesymdump-main.go)"
@@ -95,16 +95,16 @@
         "note": "tree-identical: 51c91ec1d:tsc = 16c25522e^{tree} = 21d917b05. Last old-repo commit before the migration (tsgo#4917). Bump B target."
       },
       "typescriptSubmodule": "5848bc5157b22ff7f4e3369f4645a514a433b15f",
-      "goCheckout": "/home/theo/.explore/repos/microsoft__typescript-go@16c25522e",
+      "goCheckout": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\checkouts\\microsoft__typescript-go@16c25522e",
       "oracle": {
-        "path": "/home/theo/.local/bin/tsgo-oracle-16c25522e123",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\oracle\\tsgo-oracle-16c25522e123.exe",
         "sha256": "5751c96046ed2ef6f25eb3b5a220c144ea542aea184a043c8db2cc8b5e0209d3",
         "go": "go1.26.4",
         "version": "Version 7.1.0-dev",
         "build": "CGO_ENABLED=0 GOAMD64=v1 go build ./cmd/tsgo"
       },
       "typesymDumper": {
-        "path": "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/pins/16c25522e123/target/continuation-r97-goport/typesyms/typesymdump-go",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\pins\\16c25522e123\\target\\continuation-r97-goport\\typesyms\\typesymdump-go.exe",
         "sha256": "f1c295a0c515c5a034f9970ff3013b4955867dff0c3a717bc1172d549a833d41",
         "go": "go1.26.8",
         "build": "go build -overlay with typesyms/tools/typesymdump-main-16c25522e123.go (sha256 ab0d134280b1): typesymdump-main.go plus the new contentMapperProject argument of compiler.NewCompilerHost, nil as tsgo passes for a config without contentMappers. Then scripts/upstream/record.py typesyms."
@@ -116,21 +116,21 @@
       "date": "2026-09-29",
       "layout": "typescript",
       "subdir": "tsc",
-      "goCheckout": "/home/theo/.explore/repos/microsoft__TypeScript@673a5f17d713/tsc",
+      "goCheckout": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\checkouts\\microsoft__TypeScript@673a5f17d713\\tsc",
       "oracle": {
-        "path": "/home/theo/.local/bin/tsgo-oracle-673a5f17d713",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\oracle\\tsgo-oracle-673a5f17d713.exe",
         "sha256": "2991c6e91578b4765ef34de5de47734e167f409a17bda7f450bf3d2eac64389a",
         "go": "go1.27.1",
         "version": "Version 7.1.0-dev",
         "build": "CGO_ENABLED=0 GOAMD64=v1 go build ./cmd/tsc (in tsc/)"
       },
       "typesymDumper": {
-        "path": "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/pins/673a5f17d713/target/continuation-r97-goport/typesyms/typesymdump-go",
+        "path": "F:\\ts-rust\\daavilefx-tsc\\target\\continuation-r97-goport\\pins\\673a5f17d713\\target\\continuation-r97-goport\\typesyms\\typesymdump-go.exe",
         "sha256": "be47536be09809ce87d702cbd3d963d5de2ecd75e27442160a28d357a9de57b7",
         "go": "go1.27.1",
         "build": "scripts/upstream/record.py typesyms: go build -overlay with typesyms/tools/typesymdump-main-16c25522e123.go (sha256 ab0d134280b1), module path rewritten to github.com/microsoft/TypeScript/tsc"
       },
-      "note": "Upstream head on 2026-09-29, the first microsoft/TypeScript pin: proof that the tools read the new layout. Not a bump target yet."
+      "note": "Upstream head on 2026-09-29 and the current pin: the first microsoft/TypeScript pin, and the TypeScript 7.1.0-dev build the compiler tracks."
     }
   }
 }

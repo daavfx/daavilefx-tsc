@@ -51,7 +51,7 @@
 #      -reorder-functions=cdsort -split-functions -split-all-cold -split-eh.
 #      Else non-relocation mode, where functions stay in place:
 #      -reorder-blocks=ext-tsp -split-functions -split-all-cold. No
-#      -hugify: it adds BOLT runtime code, which needs Theo's approval.
+#      -hugify: it adds BOLT runtime code, which needs maintainer approval.
 #   6. Identity: stdout, stderr and exit code of each BOLT bin equal those
 #      of the input bin on the five projects at 4 cores and 16 threads. These
 #      runs do not set the tunables, so they also check the re-exec.

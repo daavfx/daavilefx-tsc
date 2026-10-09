@@ -1,6 +1,8 @@
 target/
 *.tsbuildinfo
-.claude
 
 __pycache__/
 /.tmp-cargo/
+
+# local build logs (Phase 1 Windows build)
+.build.log*

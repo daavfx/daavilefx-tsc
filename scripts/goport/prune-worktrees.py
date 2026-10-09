@@ -14,9 +14,16 @@ branches), then `git worktree prune`. Every removed commit stays reachable from 
 """
 import os, subprocess, sys, time
 
-REPO = '/home/theo/Code/sandbox/ts-rust'
+def _repo_root():
+    out = subprocess.run(['git', 'rev-parse', '--show-toplevel'],
+                         capture_output=True, text=True)
+    if out.returncode == 0 and out.stdout.strip():
+        return out.stdout.strip()
+    return os.getcwd()
+
+REPO = os.environ.get('PRUNE_REPO', _repo_root())
 KEEP_PATHS = {REPO, f'{REPO}/target/worktrees/checker-port'}
-KEEP_BRANCHES = {'main', 'july-ultra'}
+KEEP_BRANCHES = {'main'}
 
 
 def git(*args, cwd=REPO, check=True):

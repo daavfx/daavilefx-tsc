@@ -2,7 +2,8 @@
 # Creates the R97 deliberate-error copies as hardlink trees. Each edited file
 # is replaced by a real copy before the edit, so the originals never change.
 set -euo pipefail
-R=/home/theo/Code/sandbox/ts-rust/target
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
+R=$REPO/target
 E=$R/continuation-r97-goport/errcopies
 mkdir -p $E
 mk() { id=$1; proj=$2; file=$3; text=$4

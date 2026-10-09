@@ -692,7 +692,7 @@ thread_local! {
 
 /// The node count from which the free of a dying version's data goes to the
 /// free thread (`free_released_versions_in_background`): about a 60 KB file.
-// PERF: (apiperf1) mini-743d. The free of a version of a 260 KB file (about
+// PERF: (apiperf1, upstream timing host). The free of a version of a 260 KB file (about
 // 70,000 nodes) took about 1 ms of each releaseSourceFile. For small texts
 // (about 150 nodes) the free thread made a loop of 3,000 leases 3 to 6%
 // slower: the next parse reused memory that the other thread freed.

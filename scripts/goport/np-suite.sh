@@ -20,7 +20,7 @@
 #   summary.txt    counts by status
 #   meta.txt       binary and sha256, Go commit, node, host, node exit code
 set -uo pipefail
-cd /home/theo/Code/sandbox/ts-rust
+cd "$(dirname "$(realpath "$0")")/../.."
 OUT=target/continuation-r97-goport/compat-backlog/np-suite
 if [[ -n ${NP_GO_DIR:-} ]]; then GO=$NP_GO_DIR
 elif [[ -n ${GOPORT_PIN:-} ]]; then GO=$(python3 scripts/upstream/pin.py path goCheckout "$GOPORT_PIN") || exit 2

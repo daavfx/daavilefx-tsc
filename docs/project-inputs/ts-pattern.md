@@ -9,7 +9,7 @@ document is not a project parity claim or a complete ring manifest.
 The first prepared input is available at:
 
 ```text
-/home/theo/Code/sandbox/ts-rust/target/project-inputs/ts-pattern/source
+<repo>/target/project-inputs/ts-pattern/source
 ```
 
 Use its unchanged `tsconfig.json`. The directory contains all 101 tracked
@@ -187,7 +187,7 @@ area to repeat preparation without changing the first copy:
 
 ```sh
 node scripts/prepare-ts-pattern-input.mjs \
-  /home/theo/Code/sandbox/ts-rust/target/project-inputs/ts-pattern/replay-new
+  <repo>/target/project-inputs/ts-pattern/replay-new
 ```
 
 The script refuses output outside that input area and refuses to replace an

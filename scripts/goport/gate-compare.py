@@ -3,8 +3,7 @@
 
 usage: scripts/goport/gate-compare.py <base manifest.json> <new manifest.json> [--state FILE] [--out FILE]
 
-Rules (docs/typechecker-accountability.md, "Protected set"). This file is their one implementation:
-candidate.sh side and scripts/check-typechecker-batch.mjs both run it.
+Rules (the gate manifest of each run).
 - Every base id must be in the new run. A removed id is a regression.
 - A base MATCH item must be MATCH, or ALLOWED by an allow entry (same id, condition and case path) that
   the base manifest's allow list has too ("reallowed"). The single-threaded-equal entries exist because the
@@ -24,20 +23,20 @@ candidate.sh side and scripts/check-typechecker-batch.mjs both run it.
 - A new id is listed. A new id that is FAIL is a regression.
 
 Open defect editor-long-growth (items editor/<project>/long). A FAIL passes only when
-- the batch in --state (default docs/typechecker-state/current.json) has an openDefects record
+- the batch in --state (optional, no default) has an openDefects record
   with that id and a status that starts with "open",
 - the new failure is growth only (no rss, no answers), and
 - the Rust growth is at most the fixed cap of that project in LONG_CAP below (no ratchet on the base
-  value). LONG_CAP is the one place of the caps; candidate.sh side and the batch check both run this
+  value). LONG_CAP is the one place of the caps; the compiler gate runs this
   file, and the output lists them in longCaps. Each cap is the highest Rust growth of a good build in the
   R126 to R131 and bump B gates + 0.15 MiB/edit: query-core 1.43 + 0.15 = 1.58, hono 1.13 + 0.15 = 1.28.
   The gate's own limit follows Go's slope, so the same bins can be MATCH or FAIL (editor/hono/long on
   b2b7dca1f: MATCH in r131-full at limit 1.88, FAIL in r131-full-2 at limit 1.00, both 1.13 MiB/edit).
   A project without a cap has no allowance: its FAIL is a regression.
 
-How a cap is lowered (caps only go down; only Theo can raise one):
-- By hand: a batch that lowers the growth of a project (a fix) can lower its LONG_CAP value to that
-  growth + 0.15. This file is a protected path, so the batch lists it in allowedChangedFiles, and the
+How a cap is lowered (caps only go down; only the repo owner can raise one):
+- By hand: a change that lowers the growth of a project (a fix) can lower its LONG_CAP value to that
+  growth + 0.15. This file is a protected path, so the change lists it in allowedChangedFiles, and the
   reviewer checks the value against the gate runs. The new value applies from the next revision.
 - By itself: the gate's normal limit (2 x Go + 1 MiB/edit, ls_edit_bench.py) is never under
   NORMAL_LIMIT (1.00, at Go growth 0), so a Rust growth at or under 1.00 passes it in every run. When the
@@ -103,7 +102,7 @@ Exit 1: regressions. Exit 2: bad input.
 """
 import argparse, fnmatch, hashlib, json, os, re, subprocess, sys
 
-ROOT = '/home/theo/Code/sandbox/ts-rust'
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # The fixed Rust growth cap (MiB/edit) of editor/<project>/long while the open defect editor-long-growth
 # is in the batch: the highest growth of a good build + 0.15 (see the docstring).
 LONG_CAP = {'query-core': 1.58, 'hono': 1.28}
@@ -317,12 +316,12 @@ def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('base')
     p.add_argument('new')
-    p.add_argument('--state', default=f'{ROOT}/docs/typechecker-state/current.json')
+    p.add_argument('--state', default=None, help='optional gate-state JSON holding the batch record (open defects, gate id map)')
     p.add_argument('--out')
     a = p.parse_args()
     bm, base, bhead = load(a.base)
     nm, new, nhead = load(a.new)
-    batch = read_batch(a.state)
+    batch = read_batch(a.state) if a.state else {}
     defects = open_defects(batch)
     # The id map of a pin bump (see the docstring): moved maps a base id to its new id, and gone says why a
     # base id of a mapped family has none.

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root=/home/theo/Code/sandbox/ts-rust
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 worktree="$root/target/agent-worktrees/wave150/type-name-symbol-root-composition"
 target="$root/target/go-worktrees/wave150-type-name-symbol-root-composition-fresh"
 out="$worktree/target/type-name-evidence"
-upstream=/home/theo/.explore/repos/microsoft__typescript-go
+upstream="${TS_GO_REPO:-$root/../microsoft__typescript-go}"
 seed="$root/target/worktrees/wave145-missing-type-error-alias"
 
 if [[ "${TS_WAVE150_GO_SCOPE:-0}" != 1 ]]; then

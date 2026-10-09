@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""The batch.oracleRebase fragment and the class tables of the oracle rebase runs (scripts/goport/oracle-rebase.sh).
+"""The oracleRebase fragment and the class tables of the oracle rebase runs (scripts/goport/oracle-rebase.sh).
 
 usage: oracle-rebase.py fragment --pin PIN --bins DIR --lsp-tool FILE --api-tool FILE [--wire 3] [--host H]
                                  --lsp DIR... --api DIR... [--known-diffs TSV] --out FILE
        oracle-rebase.py classes DIR... [--against DIR...] [--out FILE]
 
-fragment: checks each run and writes {lsp, api} for batch.oracleRebase (reviewer ruling 10, bump C reviewer ruling
-1 items 1 and 3; check-typechecker-batch.mjs reads it):
+fragment: checks each run and writes {lsp, api} for the rebase record:
   lsp {runs [{label, dir, resultsSha256, host}], binsSha256, oracleSha256, toolSha256, bins}
   api {runs [...], binsSha256, oracleSha256, toolSha256, wire, bins, knownDiffs [{key, reason}]}
 dir is relative to the repo root. resultsSha256 is oracle-compare.py --identity's. binsSha256 is the sha256 of
-<bins>/tsgo (check-typechecker-batch.mjs requires the tsgo of the base gate manifest), oracleSha256 the oracle of
+<bins>/tsgo (it must be the tsgo of the base gate manifest), oracleSha256 the oracle of
 the pin (pin.py show), toolSha256 the sha256 of the oracle tool that ran, bins {dir, commit, listSha256 (the
 sha256 of <bins>/bins.sha256)}. wire is the API --wire (only with --wire). knownDiffs come from the TSV
 (<key> TAB <reason>, # comments). Each LSP run's summary.json must name that tsgo and only that oracle, and each
@@ -27,7 +26,7 @@ import argparse, collections, importlib.util, json, os, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
-ROOT = '/home/theo/Code/sandbox/ts-rust'  # the main checkout: target/ lives there, also for a worktree's tools
+ROOT = REPO  # the main checkout: target/ lives there, also for a worktree's tools
 spec = importlib.util.spec_from_file_location('oracle_compare', os.path.join(HERE, 'oracle-compare.py'))
 OC = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(OC)

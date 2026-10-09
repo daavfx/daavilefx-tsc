@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Keeps the legacy /tmp/port tools alive. /tmp on zbook is tmpfs: a reboot empties it, and
-# systemd-tmpfiles-clean deletes files there after 10 days. Old revision bindings pin /tmp/port/fp.py,
+# Keeps the legacy /tmp/port tools alive. /tmp is tmpfs on Linux: a reboot empties it, and
+# systemd-tmpfiles-clean deletes files there after 10 days. Old saved records pin /tmp/port/fp.py,
 # compat/p5-corpus and typesyms/scale call /tmp/port/treehash.py, the oracle sweeps write their build
 # info under /tmp/port, and scripts/upstream/rerecord.sh (sweep step) runs `restore` first.
 #
@@ -10,7 +10,7 @@
 # ~/.config/user-tmpfiles.d/ts-rust.conf runs the same restore at login.
 # Put new tools in scripts/, never in /tmp.
 set -euo pipefail
-REPO=/home/theo/Code/sandbox/ts-rust
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
 KEEP=$REPO/target/tmp-port-persist
 
 case ${1:-} in

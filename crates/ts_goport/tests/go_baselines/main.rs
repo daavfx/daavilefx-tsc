@@ -7,7 +7,7 @@
 //! `test = false` keeps it out of `cargo test --workspace`: it needs the Go
 //! checkout (`TS_GO_REPO`, see `support::baseline`).
 //! `TS_GOPORT_BASELINE_LOCAL=1` also writes each generated baseline under
-//! `support::baseline::DEFAULT_LOCAL_ROOT`. `TSCTEST_FILTER` and
+//! the default local root (see `support::baseline`). `TSCTEST_FILTER` and
 //! `TSCTEST_JOBS` select and run tsc inputs (see `support::runner`).
 
 // The support modules port whole Go packages; the tests use only part of

@@ -10,7 +10,8 @@
 set -uo pipefail
 [[ $# -eq 3 ]] || { sed -n '2,9p' "$0"; exit 2; }
 OUT=$(realpath -m "$1") A=$(realpath "$2") B=$(realpath "$3")
-P=/home/theo/Code/sandbox/ts-rust/target/project-inputs
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
+P=$REPO/target/project-inputs
 for d in "$A" "$B"; do for b in tsgo goport; do [[ -x $d/$b ]] || { echo "missing $d/$b" >&2; exit 2; }; done; done
 rm -rf "$OUT"; mkdir -p "$OUT"
 # name|cwd|check config|emit config|emit flags (as in emit/compare-emit.sh)

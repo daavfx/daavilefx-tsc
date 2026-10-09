@@ -94,7 +94,6 @@ while (($#)); do
   esac
 done
 ((${#args[@]} == 2)) || usage
-[[ -n $pin ]] || pin=$(jq -r '.batch.upstreamPin.to // empty' "$ROOT/docs/typechecker-state/current.json" 2> /dev/null)
 [[ -n $pin ]] || pin=$(jq -r .current "$ROOT/UPSTREAM.json")
 TB=$(realpath -- "${args[0]}") || fail 2 "no test bin dir ${args[0]}"
 O=$(realpath -m -- "${args[1]}")

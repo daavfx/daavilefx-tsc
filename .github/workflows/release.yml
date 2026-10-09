@@ -180,11 +180,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      # main's Go pin, as ci.yml resolves it.
+      # The Go pin comes from UPSTREAM.json "current", as ci.yml resolves it.
       - name: Resolve the Go pin
         id: pin
         run: |
-          key=$(jq -r '.batch.upstreamPin.to // empty' docs/typechecker-state/current.json)
+          key=$(jq -r '.current // empty' UPSTREAM.json)
           python3 scripts/upstream/pin.py show ${key:+"$key"} > "$RUNNER_TEMP/pin.json"
           jq -r '"key=\(.key)", "repo=\(.repo)", "commit=\(.commit)", "subdir=\(.subdir // "")"' "$RUNNER_TEMP/pin.json" >> "$GITHUB_OUTPUT"
       # npm-pack.sh reads the pin's package input (packages/), its lib files, its LICENSE.txt and

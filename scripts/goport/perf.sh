@@ -5,12 +5,10 @@
 # side the same way. Compare binaries only within one perf.sh run.
 # Timing on a loaded host is noise: the script refuses to start when the 1-minute load
 # is over PERF_MAX_LOAD (default 1.5). PERF_WAIT=1 waits up to 30 minutes for a quiet
-# host instead. zbook is rarely quiet while agents build: run it on mini-743d
-# through remote.sh (dbook-lan is kept for revision evidence), with every
-# side on the same host.
+# host instead. Run every side of one comparison on the same quiet host.
 # Output: target/continuation-r97-goport/perf/<label>/ (per-run .time files, load.txt).
 set -uo pipefail
-cd /home/theo/Code/sandbox/ts-rust
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd); cd "$REPO"
 # tsgo on 4 KiB pages hands the work to a worker (R137), so wait4 RSS and CPU would show only the
 # launcher. Measure the process that does the work.
 export GOPORT_LAUNCH=0

@@ -93,7 +93,7 @@ source, fresh-target, exit-code, or formatting checks.
 
 ```sh
 node scripts/audit-wave152-root-workspace-evidence.mjs \
-  --logs /home/theo/Code/sandbox/ts-rust/target \
+  --logs <repo>/target \
   --output /tmp/ts-rust-wave153-root-workspace-evidence-audit.json
 ```
 

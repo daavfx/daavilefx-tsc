@@ -44,8 +44,8 @@ done
 export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }$rustflags"
 
 cargo_cmd=(cargo)
-# The capped runner needs a systemd user session (Linux hosts such as
-# zbook). CI runners have systemd-run but no user session.
+# The capped runner needs a systemd user session (on Linux). CI runners have
+# systemd-run but no user session.
 if [[ -z "${CI:-}" ]] && command -v systemd-run >/dev/null; then
   cargo_cmd=("$repo/scripts/run-cargo-capped.sh")
 fi

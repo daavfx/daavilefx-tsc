@@ -16,8 +16,8 @@
 //! an earlier job's `visit` has stored `lowestGoal`. That can happen only
 //! when the earlier visit is fast (a project that is already loaded and up
 //! to date, as at a hono reopen), and then it depends on the scheduler and
-//! the CPU: Go N skipped hono's spec project in 5 of 7 reopens on
-//! mini-743d, took the common schedule in both runs on alvin
+//! the CPU: Go N skipped hono's spec project in 5 of 7 reopens on one
+//! upstream timing host, took the common schedule in both runs on another
 //! (projsearch1b), and skipped it in about 4 of 15 reopens for the R170
 //! reviewer. Both answers are Go's. The port keeps the
 //! common one, so its answers (willRenameFiles: 11 files, 2 tests) do not

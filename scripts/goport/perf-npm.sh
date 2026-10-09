@@ -16,13 +16,13 @@
 #               warmup runs write: the no-change run that repeats in a watch-free dev loop
 # Each run must exit with its cell's code (0, or 2 for the hono cells), else the script fails.
 # Timing on a loaded host is noise: the script refuses to start when the 1-minute load is over
-# PERF_MAX_LOAD (default 1.5). Run it on a quiet host (mini-743d) through remote.sh, with
-# both projects pushed there. PERF_RUNS sets the runs per cell (default 30).
+# PERF_MAX_LOAD (default 1.5). Run both projects on one quiet host.
+# PERF_RUNS sets the runs per cell (default 30).
 #
 # usage: perf-npm.sh <label> <rs-proj> <go-proj>
 # Output: target/continuation-r97-goport/perf-npm/<label>/ (hyperfine JSON and text, table.txt).
 set -euo pipefail
-cd /home/theo/Code/sandbox/ts-rust
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd); cd "$REPO"
 [[ $# == 3 ]] || { sed -n '22p' "$0" >&2; exit 2; }
 label=$1 rs=$(realpath "$2") go=$(realpath "$3")
 out=target/continuation-r97-goport/perf-npm/$label
@@ -53,7 +53,7 @@ declare -A want=([version]=0 [query]=0 [hono]=2 [hono-noop]=2)
 for cell in "${cells[@]}"; do
   hf=()
   for i in "${!names[@]}"; do hf+=(-n "${names[i]}" "${cmds[i]} ${args[$cell]//SIDE/${names[i]%%-*}}"); done
-  # hyperfine -i ignores every non-zero exit code (mini-743d has hyperfine 1.19, which takes no list
+  # hyperfine -i ignores every non-zero exit code (older versions take no list
   # of codes), so only a cell that must exit non-zero uses it, and every run's code is checked below.
   ignore=()
   [[ ${want[$cell]} == 0 ]] || ignore=(-i)

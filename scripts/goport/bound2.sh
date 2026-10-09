@@ -3,7 +3,7 @@
 # goport_emit and goport_typesyms, records commit/fingerprint/binary/oracle hashes, then runs the
 # type-check measures (core, extra, sweep, sweep-extra2) and the emit project comparison.
 set -u
-cd /home/theo/Code/sandbox/ts-rust
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd); cd "$REPO"
 R=$1; O=target/continuation-r97-goport/measure/$R; mkdir -p $O
 WT=target/worktrees/checker-port
 REL=${GOPORT_REL:-target/continuation-r97-goport/runtime/cargo-target/release}
@@ -12,16 +12,16 @@ REL=${GOPORT_REL:-target/continuation-r97-goport/runtime/cargo-target/release}
 test -z "$(git -C $WT status --porcelain | grep -v '^?? crates/ts_goport/CANDIDATE.md$')" || { echo "dirty checkout"; exit 1; }
 for b in goport goport_emit goport_typesyms; do cp $REL/$b $O/$b.bin; done
 export GOPORT_BIN=$PWD/$O/goport.bin
-bash /home/theo/Code/sandbox/ts-rust/scripts/goport/measure.sh $R > $O/summary-main.txt 2>&1
-bash /home/theo/Code/sandbox/ts-rust/scripts/goport/measure-extra.sh $R > $O/summary-extra.txt 2>&1
-bash /home/theo/Code/sandbox/ts-rust/scripts/goport/sweep.sh $R > $O/summary-sweep.txt 2>&1
-bash /home/theo/Code/sandbox/ts-rust/scripts/goport/sweep-extra2.sh $R > $O/summary-sweep-extra2.txt 2>&1
-bash /home/theo/Code/sandbox/ts-rust/scripts/goport/compare-emit.sh $PWD/$O/goport_emit.bin $R > $O/summary-emit.txt 2>&1
-python3 - "$O" "$WT" <<'PY'
+bash "$REPO/scripts/goport/measure.sh" $R > $O/summary-main.txt 2>&1
+bash "$REPO/scripts/goport/measure-extra.sh" $R > $O/summary-extra.txt 2>&1
+bash "$REPO/scripts/goport/sweep.sh" $R > $O/summary-sweep.txt 2>&1
+bash "$REPO/scripts/goport/sweep-extra2.sh" $R > $O/summary-sweep-extra2.txt 2>&1
+bash "$REPO/scripts/goport/compare-emit.sh" $PWD/$O/goport_emit.bin $R > $O/summary-emit.txt 2>&1
+python3 - "$O" "$WT" "$REPO" <<'PY'
 import sys,json,hashlib,subprocess,datetime,os
-o,wt=sys.argv[1],sys.argv[2]
+o,wt,repo=sys.argv[1],sys.argv[2],sys.argv[3]
 h=lambda p: hashlib.sha256(open(p,'rb').read()).hexdigest()
-fp=subprocess.check_output(['python3','/home/theo/Code/sandbox/ts-rust/scripts/goport/fp.py',wt],text=True).split()
+fp=subprocess.check_output(['python3',os.path.join(repo,'scripts/goport/fp.py'),wt],text=True).split()
 m={"commit":subprocess.check_output(['git','-C',wt,'rev-parse','HEAD'],text=True).strip(),"sourceFingerprint":fp[0],
  "binaries":{b:h(f'{o}/{b}.bin') for b in ['goport','goport_emit','goport_typesyms']},
  "oracle":os.path.expanduser('~/.local/bin/tsgo-oracle'),"oracleSha256":h(os.path.expanduser('~/.local/bin/tsgo-oracle')),

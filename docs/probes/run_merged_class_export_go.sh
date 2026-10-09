@@ -4,7 +4,7 @@ set -euo pipefail
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 common="$(git -C "$root" rev-parse --path-format=absolute --git-common-dir)"
 shared_root="$(dirname -- "$common")"
-upstream="${TS_GO_REPO:-/home/theo/.explore/repos/microsoft__typescript-go}"
+upstream="${TS_GO_REPO:-$root/../microsoft__typescript-go}"
 go="$shared_root/target/toolchains/go1.26.5/bin/go"
 out="$root/target/review-merged-class-exports"
 cases="$root/docs/probes/merged_class_export_cases.json"
@@ -39,7 +39,7 @@ jq -n --arg target "$upstream/internal/checker/zz_wave152_merged_class_exports_t
 
 export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOWORK=off GOFLAGS=
 export GOMAXPROCS=1 GOMEMLIMIT=15032385536 GOTELEMETRY=off
-export GOCACHE="$out/go-cache" GOMODCACHE=/home/theo/go/pkg/mod GOTMPDIR="$out/go-tmp"
+export GOCACHE="$out/go-cache" GOMODCACHE="$HOME/go/pkg/mod" GOTMPDIR="$out/go-tmp"
 export TS_MERGED_EXPORT_CASES="$cases"
 export TS_MERGED_EXPORT_GO_REPORT="$out/go-observations.json"
 

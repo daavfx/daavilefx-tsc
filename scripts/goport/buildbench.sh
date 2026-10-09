@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Build-time benchmark of ts_goport: one timed `cargo build -p ts_goport --bins` per call.
-# Run it on a quiet host (mini-743d) under that host's lock. Compare numbers only
-# within one host.
+# Run it on a quiet host under that host's lock. Compare numbers only within one host.
 #
 # usage: buildbench.sh <out-dir> <label> <toolchain> <profile> <action> [rustflags]
 #   toolchain  rustup toolchain name (1.93.0, nightly-2026-06-17, ...)
@@ -14,7 +13,7 @@
 #   rustflags  extra RUSTFLAGS, for example "-Zthreads=8"
 # Env: BENCH_INCREMENTAL=1 builds every workspace crate incrementally, BENCH_INCREMENTAL=ts_goport
 # only ts_goport (the run-cargo-capped.sh edit-loop default); each has its own target dir. BENCH_JOBS
-# (default 16, zbook's TS_CARGO_JOBS). BENCH_MEM_KIB (default 22 GiB) is the cgroup cap.
+# (default 16, the big-host TS_CARGO_JOBS). BENCH_MEM_KIB (default 22 GiB) is the cgroup cap.
 # BENCH_TAG=<name> gives a config with other env (CARGO_PROFILE_*) its own target dir.
 # Each config (toolchain, profile, flags, incremental) has its own target dir under
 # target/bench/, so a clean build is a real cold build. sccache is off.

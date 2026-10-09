@@ -3,7 +3,7 @@
   "sourceTree": "7e2e67f2661ac28156cbaf127853c6aef9af4710",
   "reportCommit": "5b23c2d3c4a7769faff44ff1e30cb9794f030a30",
   "log": {
-    "path": "/home/theo/Code/sandbox/ts-rust/target/wave152-root-workspace-tests.log",
+    "path": "<repo>/target/wave152-root-workspace-tests.log",
     "sha256": "49c5474bfc8c4a281f229ab67acce04810548006fa014be2831dc31958721a5f"
   },
   "reportSha256": "a58e41e250c39874371deff5d087050b2a619ecea26f02e8a0a5ce1548e58865",
@@ -25,7 +25,7 @@
   "duplicateQualifiedNames": [],
   "comparisons": [
     {
-      "path": "/home/theo/Code/sandbox/ts-rust/target/wave151-root-workspace-tests.log",
+      "path": "<repo>/target/wave151-root-workspace-tests.log",
       "sha256": "35f2c5696b59039f434fa6a69e7ac7d93ac2c6fb1f8b3e6af4f500fa49c0f222",
       "totals": {
         "passed": 6676,
@@ -73,7 +73,7 @@
       "newNames": 138
     },
     {
-      "path": "/home/theo/Code/sandbox/ts-rust/target/wave150-export-lexical-source-combined-tests-2.log",
+      "path": "<repo>/target/wave150-export-lexical-source-combined-tests-2.log",
       "sha256": "7f6bca8a7a50f9de2c0205a02c81d6772c3a860298eead8ea76b73f0473768ac",
       "totals": {
         "passed": 4429,
@@ -221,7 +221,7 @@
     "retainedRootPatchId": "4a17f65597697790428600406f071b104541e1ac"
   },
   "formatLog": {
-    "path": "/home/theo/Code/sandbox/ts-rust/target/wave152-root-workspace-format.log",
+    "path": "<repo>/target/wave152-root-workspace-format.log",
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },

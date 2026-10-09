@@ -1,29 +1,26 @@
 #!/usr/bin/env bash
-# Oracle rebase runs of a pin-bump batch (reviewer ruling 10; bump C reviewer ruling 1 items 1 and 3; the steps of
-# target/continuation-r97-goport/upstream/bumpC/rebaseN/tools/job.sh). The base batch's bins run the LSP oracle
-# (the 6 batteries of candidate.sh) and the API oracle (the API batteries of candidate.sh, `--wire 3`) against the
-# goldens of the new pin, two runs of each, on one remote host. Then oracle-rebase.py writes the batch.oracleRebase
-# fragment and the class tables.
+# Oracle rebase runs of a pin bump. Bins built at the old pin run the LSP oracle and the API oracle
+# against the goldens of the new pin, two runs of each. Then oracle-rebase.py writes the
+# batch.oracleRebase fragment and the class tables.
 #
 # usage: scripts/goport/oracle-rebase.sh <pin> <name> <bins dir> <out dir> [--no-wire] [--known-diffs TSV]
 #   <pin>       the new pin (UPSTREAM.json of this checkout names its oracle and pin root)
 #   <name>      the runs are lsp-<name>-1, api-<name>-1, lsp-<name>-2 and api-<name>-2, in that order; the labels
 #               must be free in ls-oracle/battery/results and tests2/api/results
-#   <bins dir>  the base batch's bins (tsgo, COMMIT, bins.sha256), for example its evidence-cache bins
+#   <bins dir>  bins (tsgo, COMMIT, bins.sha256), for example the bins of a saved evidence cache
 #   <out dir>   logs/, api-root/ (the API out-root: traces -> the pin's API traces, golden and results ->
 #               tests2/api), oracle-rebase.json (the fragment) and classes-lsp.md and classes-api.md
-#   --no-wire   the base bins speak the pin's API protocol: no --wire, and the fragment has no wire
+#   --no-wire   the bins speak the pin's API protocol: no --wire, and the fragment has no wire
 #   --known-diffs TSV  <key> TAB <reason> lines for batch.oracleRebase.api.knownDiffs
-# The tools are lsp_oracle.py and api_oracle.py of this script's checkout (a worktree's copies are pushed to the
-# host). The host comes from `remote.sh job auto` (REMOTE_HOSTS picks the hosts). Run the script from zbook: it
-# starts itself under `remote.sh job auto`, which holds the host lock and sets REMOTE_HOST. The output ends with
-# DONE or FAIL rc=<N>. The runs take about 15 minutes on cup2.
+# The tools are lsp_oracle.py and api_oracle.py of this checkout. The batteries are the ones with a
+# selfchecked golden set at the pin (ls-oracle/battery and tests2/api, as rerecord.sh picks them), so a
+# new battery or a new golden set joins the run with no edit here. The runs take about 15 minutes.
+# The output ends with DONE or FAIL rc=<N>.
 set -uo pipefail
-ROOT=/home/theo/Code/sandbox/ts-rust
+ROOT=$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../.." && pwd)
 R=$ROOT/target/continuation-r97-goport
 SELF=$(realpath "${BASH_SOURCE[0]}")
 G=$(dirname "$SELF")
-RS=$ROOT/scripts/goport/remote.sh
 die() { echo "oracle-rebase.sh: $*" >&2; echo "FAIL rc=2"; exit 2; }
 
 (($# >= 4)) || die "usage: oracle-rebase.sh <pin> <name> <bins dir> <out dir> [--no-wire] [--known-diffs TSV]"
@@ -38,16 +35,24 @@ while (($#)); do
   esac
   shift
 done
-# The batteries of candidate.sh side (one list for both).
-eval "$(grep -E '^(LSP_BATTERIES|API_BATTERIES|API_EXT_BATTERIES|API_NO_EXT_ORACLES)=' "$G/candidate.sh")"
+# The battery lists (inlined; LSP/API lists are re-derived from the golden dirs below).
+# LSP_BATTERIES and API_BATTERIES are re-derived from the golden dirs below;
+# the EXT/NO_EXT lists pin the oracle SHAs that lack an extended-protocol build.
+LSP_BATTERIES=b1-inline,b1-query-core,b2-query-core,b1-hono,b2-hono,fourslash
+API_BATTERIES=(effect hono hono-xchecker qc qc-callbacks qc-lsp qc-proto qc-xchecker tsp-lsp zod)
+API_EXT_BATTERIES=(hono-ext qc-ext zod-ext)
+API_NO_EXT_ORACLES=(d2dc9ff46ff5 204f15c76702)
 pin() { python3 "$G/../upstream/pin.py" "$@"; }
 ORACLE=$(pin path oracle "$PIN") || die "pin $PIN is not in $(dirname "$G")/../UPSTREAM.json"
 OSHA=$(pin show "$PIN" | jq -r .oracle.sha256)
 O12=${OSHA:0:12}
+# The batteries with a selfchecked golden set at this pin, as rerecord.sh picks them.
+batteries_of() { local d; for d in "$1/golden/$O12"/*/; do [[ -f $d/selfcheck-summary.json ]] && basename "$d"; done; }
+LSP_BATTERIES=$(batteries_of "$R/ls-oracle/battery" | paste -sd,)
+API_BATTERIES=$(batteries_of "$R/tests2/api" | paste -sd,)
 NTRACES=$(pin path root "$PIN")/target/continuation-r97-goport/tests2/api/traces
 APIROOT=$OUT/api-root
-API=("${API_BATTERIES[@]}")
-[[ " ${API_NO_EXT_ORACLES[*]} " == *" $O12 "* ]] || API+=("${API_EXT_BATTERIES[@]}")
+API=(${API_BATTERIES//,/ })
 LABELS=("lsp-$NAME-1" "api-$NAME-1" "lsp-$NAME-2" "api-$NAME-2")
 dir_of() { [[ $1 == lsp-* ]] && echo "$R/ls-oracle/battery/results/$1" || echo "$R/tests2/api/results/$1"; }
 

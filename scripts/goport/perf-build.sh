@@ -14,17 +14,19 @@
 # <first side> / <side>, and how many runs had an output tree (with and without .tsbuildinfo) or stdout that
 # differs from the first side's run of the same step and round.
 # Timing on a loaded host is noise: the tool refuses to start above load PERF_MAX_LOAD (1.5), or waits up to 30
-# minutes with PERF_WAIT=1. Run it on a quiet host through remote.sh (mini-743d). GOPORT_* and
+# minutes with PERF_WAIT=1. Run it on a quiet host. GOPORT_* and
 # allocator variables are removed and GOPORT_LAUNCH=0 is set, as in perf.sh (PERF_LAUNCH=1 keeps the launcher).
 # Output: target/continuation-r97-goport/perf-build/<label>/ (runs.jsonl, host.json, table.txt).
 set -uo pipefail
 [[ $# -ge 2 ]] || { sed -n '2,18p' "$0"; exit 2; }
+REPO=$(cd "$(dirname "$(realpath "$0")")/../.." && pwd)
+export REPO
 exec 8> /tmp/goport-perf.lock
 flock -n 8 || { echo "another perf run holds /tmp/goport-perf.lock; waiting"; flock 8; }
 exec python3 - "$@" << 'PY'
 import argparse, hashlib, json, os, platform, random, shutil, statistics, subprocess, sys, time
 
-REPO = '/home/theo/Code/sandbox/ts-rust'
+REPO = os.environ['REPO']
 P = REPO + '/target/project-inputs'
 # name: (source, argv after the bin, body-edit file, api-edit file)
 SCEN = {

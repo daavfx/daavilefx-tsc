@@ -1,6 +1,6 @@
 # Format, lint, build and test on every pull request and on each push to main that changes code.
 # The full protected set (TestLocal shards, gate, bound runs, LSP and API oracles, np-suite) stays in
-# the revision pipeline (scripts/goport/candidate.sh). This workflow is a fast check that the tree
+# the harness in scripts/goport/README.md. This workflow is a fast check that the tree
 # builds and its own tests pass on Linux (x64 and arm64) and macOS.
 name: CI
 
@@ -49,7 +49,7 @@ jobs:
         run: |
           cargo run --locked --quiet -p ts_ast_codegen -- check crates/ts_goport/src/astdata/syntax_kind.rs
           cargo run --locked --quiet -p ts_ast_codegen -- check-ast crates/ts_goport/src/astdata/ast_generated.rs
-      # The packages of the revision quality step (candidate.sh): 0 warnings.
+      # The goport packages: 0 warnings.
       - run: cargo clippy --locked -p ts_goport -p goport_util -p goport_lsproto --all-targets -- -D warnings
 
   test:
@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Blacksmith runners (the pingdotgg org has the app), as T3 Code uses.
+        # Blacksmith runners. This fork needs its own runner app for them.
         runner: [blacksmith-16vcpu-ubuntu-2404, blacksmith-16vcpu-ubuntu-2404-arm, blacksmith-12vcpu-macos-26]
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 120
@@ -68,12 +68,12 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      # main's Go pin is the saved state's batch.upstreamPin.to. UPSTREAM.json "current" can be an older
-      # pin until the default pin switch (AGENTS.md, "Pin").
+      # The Go pin comes from UPSTREAM.json "current". GOPORT_PIN selects another pin per run
+      # (scripts/upstream/pin.py, UPSTREAM.md).
       - name: Resolve the Go pin
         id: pin
         run: |
-          key=$(jq -r '.batch.upstreamPin.to // empty' docs/typechecker-state/current.json)
+          key=$(jq -r '.current // empty' UPSTREAM.json)
           python3 scripts/upstream/pin.py show ${key:+"$key"} > "$RUNNER_TEMP/pin.json"
           jq -r '"repo=\(.repo)", "commit=\(.commit)", "subdir=\(.subdir // "")"' "$RUNNER_TEMP/pin.json" >> "$GITHUB_OUTPUT"
       - name: Check out the pinned Go source
@@ -84,7 +84,7 @@ jobs:
           path: go-pin
           sparse-checkout: ${{ steps.pin.outputs.subdir }}
           persist-credentials: false
-      # The go_baselines temp roots default to zbook paths on Linux (/tmp on macOS).
+      # The go_baselines temp roots default to the system temp dir (/tmp on Linux and macOS).
       - name: Set the test paths
         run: |
           echo "TS_GO_REPO=$GITHUB_WORKSPACE/go-pin${SUBDIR:+/$SUBDIR}" >> "$GITHUB_ENV"
@@ -111,7 +111,7 @@ jobs:
       - name: Unit and integration tests
         run: cargo test --release --locked --workspace --no-fail-fast
       # go_baselines has `test = false`, so --workspace skips it. TestLocal (about 12,700 compiler
-      # cases) runs in 4 shards in goport-tests.sh, in the revision pipeline; the rest of the default
+      # cases) runs in 4 shards in goport-tests.sh; the rest of the default
       # go_baselines set runs here.
       - name: Go baselines
         run: |

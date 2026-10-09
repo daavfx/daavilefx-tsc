@@ -612,7 +612,7 @@ pub(super) fn is_common_js_module_exports(node: Node) -> bool {
 // PERF: aliaswalk1. Go walks every node of the file. The port did the
 // same, and in an edited file each node data read is a scoped read: on an
 // effect Option.ts edit the walk took 133 us against 56 us in Go (stable
-// build, mini-743d, bpftrace). A scan of the kind column (no node data
+// build, upstream timing host, bpftrace). A scan of the kind column (no node data
 // read) finds the nodes that the walk can act on, and their parent chains
 // give the paths to them: 17 us.
 // The Go parser sets the parent of each child of a node when it finishes

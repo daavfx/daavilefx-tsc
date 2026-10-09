@@ -35,14 +35,15 @@
 # (a corpus id names another case at another Go pin).
 # Project inputs and the existing scripts and oracle caches are only read.
 set -uo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+REPO=$(cd "$HERE/../.." && pwd)
+export REPO
 # GOPORT_PIN=<key> runs this against that upstream pin (scripts/upstream/pin.py). Unset: no change.
-[[ -z ${GOPORT_PIN:-} || -n ${GOPORT_PIN_ACTIVE:-} ]] || exec python3 /home/theo/Code/sandbox/ts-rust/scripts/upstream/pin.py exec -- bash "$0" "$@"
+[[ -z ${GOPORT_PIN:-} || -n ${GOPORT_PIN_ACTIVE:-} ]] || exec python3 "$REPO/scripts/upstream/pin.py" exec -- bash "$0" "$@"
 
-REPO=/home/theo/Code/sandbox/ts-rust
 R=$REPO/target/continuation-r97-goport
 TP=$R/tools-port
 X=$REPO/target/project-inputs-extra
-HERE=$(cd "$(dirname "$0")" && pwd)
 SELF=$HERE/$(basename "$0")
 ALLOW=$HERE/gate-allow.txt
 EMIT_SAMPLE=$HERE/gate-emit-sample.txt
@@ -99,7 +100,7 @@ import fnmatch, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 import psutil
 
-REPO = Path('/home/theo/Code/sandbox/ts-rust')
+REPO = Path(os.environ['REPO'])
 R = REPO / 'target/continuation-r97-goport'
 X = REPO / 'target/project-inputs-extra'
 ORACLE = Path.home() / '.local/bin/tsgo-oracle'
@@ -611,7 +612,7 @@ META=$(python3 - "$LABEL" "$MODE" "$STARTED" "$COMMIT" "$COMMIT_FULL" "$BINS" "$
 import hashlib, json, os, sys
 from pathlib import Path
 label, mode, started, commit_in, commit, bins, gate, allow = sys.argv[1:]
-R = Path('/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport')
+R = Path(os.environ['REPO']) / 'target/continuation-r97-goport'
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def family(root, pattern):
     # One hash for the files under root that match pattern; 'missing' when root does not exist.

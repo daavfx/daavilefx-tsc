@@ -25,7 +25,7 @@ Paths below are relative to the main ts-rust checkout.
 | Reproduction script             | `scripts/prepare-zod-project-input.mjs`                       |
 
 The prepared source is
-`/home/theo/Code/sandbox/ts-rust/target/project-inputs/zod/source` on this machine.
+`<repo>/target/project-inputs/zod/source` on this machine.
 The script uses the common Git directory to locate the main checkout when it
 runs from a worktree. `ZOD_INPUT_OUT` can set an explicit output directory.
 
@@ -34,7 +34,7 @@ runs from a worktree. `ZOD_INPUT_OUT` can set an explicit output directory.
 - Repository: `colinhacks/zod`.
 - Commit: `43f729db4aa0cedff6d6b3261f33f8556b3c7102`.
 - Git tree: `992c4000825b1e2e8b6a835b3f5471caebafa4ed`.
-- Cache checkout: `/home/theo/.explore/repos/colinhacks__zod`.
+- Cache checkout: `<checkout>/colinhacks__zod`.
 - All 669 tracked entries match their Git blob IDs after installation.
 - The archive retains source files, tests, instructions, licenses, and symlinks.
   It has no Git metadata. No cache checkout or upstream source file was changed.

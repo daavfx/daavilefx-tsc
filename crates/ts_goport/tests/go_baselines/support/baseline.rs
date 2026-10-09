@@ -3,13 +3,13 @@
 //! typescript-go reference baseline.
 //!
 //! Environment:
-//! - `TS_GO_REPO`: the Go checkout (default `DEFAULT_GO_REPO`), in either
-//!   layout (`is_merged_layout`). The reference root is
+//! - `TS_GO_REPO`: the Go checkout (default `<repo>/target/go-checkout`), in
+//!   either layout (`is_merged_layout`). The reference root is
 //!   `testdata/baselines/reference`. At the typescript-go layout the
 //!   submodule reference root is
 //!   `_submodules/TypeScript/tests/baselines/reference`.
 //! - `TS_GOPORT_BASELINE_LOCAL`: unset (or empty) compares only. `1` writes
-//!   every generated baseline under `DEFAULT_LOCAL_ROOT` in the Go layout
+//!   every generated baseline under the default local root in the Go layout
 //!   (`<subfolder>/<name>`, the submodule diff files, `.delete` markers).
 //!   Any other value is the local root.
 //! - `TS_GOPORT_BASELINE_TRACK=<file>`: appends `<subfolder>/<name>` of each
@@ -32,18 +32,34 @@ use ts_goport::scanner_util::{go_string_bytes, go_string_from_bytes};
 
 use super::patience;
 
-/// The pinned typescript-go checkout.
-pub const DEFAULT_GO_REPO: &str = "/home/theo/.explore/repos/microsoft__typescript-go";
-/// The local baseline root for `TS_GOPORT_BASELINE_LOCAL=1`.
-#[cfg(not(target_os = "macos"))]
-pub const DEFAULT_LOCAL_ROOT: &str =
-    "/home/theo/Code/sandbox/ts-rust/target/continuation-r97-goport/go-baseline-tests/local";
-/// macOS: `/home` is an autofs mount there, so the default is under /tmp.
-#[cfg(target_os = "macos")]
-pub const DEFAULT_LOCAL_ROOT: &str = "/tmp/ts-rust-go-baseline-tests/local";
 pub const GO_REPO_ENV: &str = "TS_GO_REPO";
 pub const LOCAL_ENV: &str = "TS_GOPORT_BASELINE_LOCAL";
 pub const TRACK_ENV: &str = "TS_GOPORT_BASELINE_TRACK";
+
+/// The repo root of this checkout (the test target lives in
+/// `crates/ts_goport`, so two levels up).
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("..")
+}
+
+/// The local baseline root for `TS_GOPORT_BASELINE_LOCAL=1`.
+fn default_local_root() -> PathBuf {
+    repo_root()
+        .join("target")
+        .join("go-baseline-tests")
+        .join("local")
+}
+
+/// The pinned typescript-go checkout: `TS_GO_REPO`, or
+/// `<repo>/target/go-checkout`.
+pub fn go_repo() -> PathBuf {
+    match std::env::var_os(GO_REPO_ENV) {
+        Some(repo) if !repo.is_empty() => PathBuf::from(repo),
+        _ => repo_root().join("target").join("go-checkout"),
+    }
+}
 
 /// A Go `func(string) string` diff fixup.
 pub type DiffFixup = Arc<dyn Fn(&str) -> String + Send + Sync>;
@@ -62,14 +78,6 @@ pub struct Options {
 
 // Go: testutil/baseline/baseline.go:21 NoContent
 pub const NO_CONTENT: &str = "<no content>";
-
-/// The typescript-go checkout: `TS_GO_REPO`, or `DEFAULT_GO_REPO`.
-pub fn go_repo() -> PathBuf {
-    match std::env::var_os(GO_REPO_ENV) {
-        Some(repo) if !repo.is_empty() => PathBuf::from(repo),
-        _ => PathBuf::from(DEFAULT_GO_REPO),
-    }
-}
 
 /// Whether the Go checkout has the microsoft/TypeScript `tsc/` layout
 /// (5f647a841a, "Apply the TypeScript 7 repository layout"): no
@@ -122,7 +130,7 @@ pub fn local_root() -> Option<PathBuf> {
     if value.is_empty() {
         None
     } else if value == "1" {
-        Some(PathBuf::from(DEFAULT_LOCAL_ROOT))
+        Some(default_local_root())
     } else {
         Some(PathBuf::from(value))
     }

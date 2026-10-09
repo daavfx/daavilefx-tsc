@@ -6,7 +6,7 @@
 # Only the exit rule below differs.
 . "$(dirname "$(realpath "$0")")/exit-rule.sh" || exit 2
 [ -n "$1" ] || { echo "usage: $0 <round>" >&2; exit 2; }
-cd /home/theo/Code/sandbox/ts-rust
+cd "$(dirname "$(realpath "$0")")/../.."
 B=${GOPORT_BIN:-target/continuation-r97-goport/runtime/cargo-target/release/goport}
 P=target/project-inputs/hono/source
 O=target/continuation-r97-goport/measure/$1; OR=target/continuation-r97-goport/oracle-sweep; mkdir -p $O $OR

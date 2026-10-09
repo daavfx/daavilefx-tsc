@@ -62,7 +62,7 @@
 # SIGILL), and panic=abort (the port catches panics for Go recover parity).
 # Measured on R145 source (static1 lane, target/continuation-r97-goport/static1):
 # PGO + BOLT builds against the default, paired rounds of tsgo check and emit on
-# query, hono, zod and effect, on dbook, mini-abf9 and mini-743d (mean of the 8
+# query, hono, zod and effect, on the upstream timing hosts (mean of the 8
 # cells per run). Output is byte-equal.
 #   - RELEASE_PIE=0: 1.0 to 1.3% faster, peak RSS the same. Same glibc floor.
 #     The bin loses ASLR for its own code and data, as Go's tsgo (non-PIE) does.
@@ -81,18 +81,18 @@
 #     (glibc 2.36), so it does not start on the floor glibc. Not used.
 # So the default stays dynamic glibc and PIE.
 # Measured on R148 source (pgolsp1, target/continuation-r97-goport/pgolsp1):
-# editor sessions in the training against none, every side in one job on a
-# mini (the first two rounds on dbook-lan). Output is byte-equal, and the LSP
+# editor sessions in the training against none, every side in one job on one
+# host (the first two rounds on a second host). Output is byte-equal, and the LSP
 # oracle answers are the same.
-#   - Sessions in BOLT only at 2500 Hz (the default), on mini-abf9: editor
+#   - Sessions in BOLT only at 2500 Hz (the default), on the first host: editor
 #     edit medians (ls_edit_bench long) query-core -3.7%, effect -3.5%, hono
-#     -1.1% (another build of the same script on mini-743d: -4.9%, -4.9%,
+#     -1.1% (another build of the same script on the second host: -4.9%, -4.9%,
 #     -1.3%). The CLI cells (-p, --singleThreaded, tsc -b, watch) moved
 #     -4.2 to +0.8% (hono watch api +1.4%, and -0.6% in a rerun with more
 #     reps). Peak RSS moved 0.3% at most (the other build: query +1.6%).
 #   - Sessions in PGO and BOLT at 1/8 of the CLI weight: about 1 point more
 #     on effect and hono, but the bin text that a CLI run maps grew by 2 to
-#     7 MiB (query check peak RSS +7.7% on mini-743d), most of it in the PGO
+#     7 MiB (query check peak RSS +7.7% on that host), most of it in the PGO
 #     layout.
 #   - Sessions in PGO and BOLT at full weight or 1/4: zod and effect check
 #     lost 1.1 to 2.2%.
@@ -101,7 +101,7 @@
 # ways (as now), two release builds each, every side in one run: tsgo -p on the
 # gate projects (effect with and without the plugin), T3 Code (5 workspaces,
 # with and without the plugin), eslint-plugin-svelte and huggingface.js; 2 runs
-# on mini-743d, 2 on alvin. Output is byte-equal.
+# on each of two hosts. Output is byte-equal.
 #   - Both ways, against the plugin only: runs without the plugin 0.2 to 1.0%
 #     faster (geometric mean of the cells), runs with it 0.4 to 0.8% faster
 #     (one alvin run: 1.1% slower, within its noise), peak RSS the same

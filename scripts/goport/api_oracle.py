@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Differential API oracle: pinned `tsgo --api` against the goport `tsgo --api`.
 
-The script mirrors these Go files (pinned dc37b5249, /home/theo/.explore/repos/microsoft__typescript-go):
+The script mirrors these Go files (pinned dc37b5249, typescript-go checkout):
 
   cmd/tsgo/api.go                  flags --cwd, --callbacks, --async
   internal/api/proto.go            methods, params and response shapes
@@ -151,7 +151,8 @@ FLAKY_FORMAT = "goport-api-flaky/1"
 RESULT_FORMAT = "goport-api-result/1"
 SUMMARY_FORMAT = "goport-api-summary/1"
 
-REPO = "/home/theo/Code/sandbox/ts-rust"
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
 PIN_TOOL = REPO + "/scripts/upstream/pin.py"
 O_PIN = "dc37b5249ab6"  # the last pin with API protocol 1
 A_PIN = "52168999f3dc"  # the last pin with API protocol 2
@@ -175,7 +176,7 @@ PROTOCOL = 1 if PIN == O_PIN else 2 if PIN == A_PIN else 3 if PIN == B_PIN else 
 PROTOCOL2 = PROTOCOL >= 2
 DEFAULT_OUT_ROOT = REPO + "/target/continuation-r97-goport/tests2/api"
 DEFAULT_ORACLE = os.path.expanduser("~/.local/bin/tsgo-oracle")
-GO_REPO = "/home/theo/.explore/repos/microsoft__typescript-go"
+GO_REPO = os.environ.get("TS_GO_REPO", REPO + "/target/go-checkout")
 PROJECT_INPUTS = REPO + "/target/project-inputs"
 
 EXIT_OK, EXIT_FAILED, EXIT_USAGE, EXIT_INPUT_CHANGED = 0, 1, 2, 3

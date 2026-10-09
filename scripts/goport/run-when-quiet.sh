@@ -1,6 +1,6 @@
 #!/bin/bash
 # Waits until no agent cargo build has run for 120 s, then starts the given driver.
-cd /home/theo/Code/sandbox/ts-rust
+cd "$(dirname "$(realpath "$0")")/../.."
 quiet=0
 while [ $quiet -lt 120 ]; do
   if pgrep -f "[r]un-cargo-capped.sh" >/dev/null; then quiet=0; else quiet=$((quiet+10)); fi

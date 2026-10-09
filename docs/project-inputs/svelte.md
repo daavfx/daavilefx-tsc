@@ -8,7 +8,7 @@ prepared. This is not a compiler parity result or a passing project ring.
 - Repository: `sveltejs/svelte`.
 - Commit: `4d5139552dac8593c5e020846fa7ce8e96ea97b7`.
 - Tree: `a44d2a7d2c7f405d6f4291fe8467dd53604a0686`.
-- Input directory: `/home/theo/Code/sandbox/ts-rust/target/project-inputs/svelte`.
+- Input directory: `target/project-inputs/svelte`.
 - Prepared repository: `source/` inside the input directory.
 - Logs and manifests: `evidence/` inside the input directory.
 - Replay script: `scripts/prepare-svelte-input.mjs`.
@@ -61,7 +61,7 @@ and Bundler resolution. The runtime config still extends the compiler config
 and uses its own ES2021 libraries and empty automatic `types` list. No config
 option, path mapping, include, exclusion, or test root was changed.
 
-The root lists match `docs/typechecker-modern-project-inputs.md`, including
+The root lists match the modern project inputs inventory, including
 the compiler test drivers and sample `_config.js` files. The loaded-file lists
 come from TypeScript source loading, not from Go or Rust. They do not prove
 matching module graphs or successful typechecking.

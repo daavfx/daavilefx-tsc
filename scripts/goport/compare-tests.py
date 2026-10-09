@@ -3,7 +3,7 @@
 
 usage: compare-tests.py <base results.json> <new results.json> [--name-map TSV] [--out FILE]
 
-A results file that ends in .gz is read as gzip (docs/goport-protected/tests-r131.json.gz). Its
+A results file that ends in .gz is read as gzip. Its
 sha256 in the output is the sha256 of the file as stored. Each file must have a "pin" of 7 to 64 hex
 characters (the Go pin that goport-tests.sh ran at), or the tool exits 2.
 
@@ -29,8 +29,7 @@ that is not an identity is rejected (mapRejected, exit 1) when:
     rejected,
   - its new name is a base name (so a map cannot swap a lost name for a passing one, or chain), or
   - it removes a name, the Go pin did not change and the suite is not a kept-crate suite.
-The reviewer checks each entry against its evidence. check-typechecker-batch.mjs applies the same
-format and rules.
+The reviewer checks each entry against its evidence.
 
 Output: JSON with "base", "new" and "nameMap" (path, sha256), then per suite and in "total":
   retained, recovered, newNames: counts
@@ -99,7 +98,7 @@ def load_map(path):
 
 
 def same_hash(a, b):
-    """Two abbreviated or full git hashes name the same object (check-typechecker-batch.mjs sameHash)."""
+    """Two abbreviated or full git hashes name the same object."""
     if not isinstance(a, str) or not isinstance(b, str):
         return False
     x, y = a.lower(), b.lower()

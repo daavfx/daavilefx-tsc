@@ -73,7 +73,7 @@ corpus-diag/11540 | _submodules/TypeScript/tests/cases/conformance/references/li
 # (upstream/bumpC/allow-map-head.tsv). The entries above keep the ids and paths of the older pins. At this pin,
 # 07615 and 07616 name the same typesVersions cases as the dc37b5249ab6 entries of those ids, but with their
 # testdata path, so each entry still applies only at its own pin. Evidence at this pin:
-# upstream/bumpC/evidence-N/gate-allow/out/dbook-lan-0929T1616/allow-st/check.tsv (dbook, oracle 2991c6e91578,
+# upstream/bumpC evidence at this pin (oracle 2991c6e91578,
 # 3 --singleThreaded and 20 threaded runs per case). The single-threaded output was the same in each run and
 # equals the pin B single-threaded output (with the case dir id changed). The threaded output changed only for
 # 04541, 05416, 10448 and 10455, the 4 cases that changed at B. The R139 goport (82662fb8d) output equals the
@@ -99,7 +99,7 @@ corpus-diag/11459 | testdata/tests/cases/conformance/references/library-referenc
 # members in check order, which varies between runs and moves between files. Gates r113-full,
 # r113-full-2 and r114-full: the Rust output was byte-identical in every run, and one Go run
 # equals it byte for byte. Each file must still pass same-chars in the run that allows it.
-# At 673a5f17d713 (upstream/bumpC/evidence-N/gate-allow/out/dbook-lan-0929T1616/typesyms): 5 Go runs give 2
+# At 673a5f17d713 (upstream/bumpC evidence): 5 Go runs give 2
 # outputs each for McpSchema.ts.types and mcpProtocol!v2025_11_25.ts.types, and differ from the recorded pin dump
 # in 6 .types files, so the order still depends on the Go run. McpServer.ts.symbols and
 # mcpProtocol!v2025_11_25.ts.symbols also change at this pin for another reason: ts#63908 removes repeated

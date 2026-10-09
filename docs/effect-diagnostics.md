@@ -39,7 +39,7 @@ The code is `crates/ts_goport/src/effect`, a port of
   records the version `<version>+effect-tsgo.0.46.1`, as effect-tsgo does.
   Plain tsgo and tsc-rs without the plugin then check the project again
   instead of reading Effect diagnostics (plain tsgo panics on those:
-  "Unknown diagnostic message"). tsc-rs from Theo PR #4, before this
+  "Unknown diagnostic message"). An earlier tsc-rs, before this
   suffix, wrote the plain version with Effect options and diagnostics.
   tsc-rs checks that build info again too, as effect-tsgo does. Plain tsgo
   still panics on it until one tsc-rs run writes it again. The language

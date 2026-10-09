@@ -1,8 +1,44 @@
-# ts-rust (aka tsc-rs)
+# daavilefx-tsc
 
-I wanted to see if LLMs could port the TypeScript compiler, checker and lsp to Rust. Turns out they can.
+**daavilefx-tsc** is a Windows-first fork of
+[pingdotgg/ts-rust](https://github.com/pingdotgg/ts-rust), itself a Rust port of Microsoft's
+TypeScript-Go compiler ([microsoft/TypeScript](https://github.com/microsoft/TypeScript) under
+`tsc/`, TypeScript 7.1.0-dev). It is owned by [daavfx](https://github.com/daavfx). Remotes:
+`origin` is this fork, `upstream` is pingdotgg/ts-rust.
 
-It [cost over $420,000](#how-did-this-go) in tokens to do it, but you could probably have done it for ~$20k (see below)
+## What this fork changes
+
+- **Windows build support is the priority.** The port already supports
+  `x86_64-pc-windows-msvc` (named pipes, native path handling); upstream ships no Windows binary
+  and runs no Windows CI runner, so on this fork the local Windows build is the source of truth.
+  [AGENTS.md](AGENTS.md) has the build rules.
+- **The previous author's agent-orchestration state and working notes are removed**: the saved
+  state, the `/goal` loop rules, the remote-runner setup. What is left is the compiler port:
+  `crates/ts_goport`, `crates/ts_wasm`, the `tools/` codegens and the `scripts/goport/` parity
+  harness.
+- **Upstream's oracle and parity scripts still carry paths that only exist on the previous
+  author's machine.** Edit those paths before running anything that needs a Go checkout, an oracle
+  binary or a pin cache.
+
+## Credit and license
+
+This is a fork, stated plainly: the compiler port is the work of
+[pingdotgg](https://github.com/pingdotgg) (Theo Browne) and of the LLMs he ran against it, and
+every commit inherited from `pingdotgg/ts-rust` is still his. Nothing here rewrites that history;
+the GitHub fork network records it.
+
+The repository is **MIT AND Apache-2.0** ([LICENSE](LICENSE)): the port is MIT (Copyright (c) 2026
+T3 Tools Inc.), the TypeScript code it ports is Apache-2.0, and parts of the Go standard library
+are BSD-3-Clause. [NOTICE.md](NOTICE.md) and `licenses/` carry those notices and stay with any
+redistribution.
+
+# The Slop Line
+
+Everything below this line is the upstream project's README, written by its author and his LLMs.
+This fork keeps it as the documentation of the compiler port.
+
+I wanted to see if LLMs could port the TypeScript compiler, checker and lsp to Rust. Turns out they
+can.
 
 ## Motivations
 
@@ -14,44 +50,44 @@ It [cost over $420,000](#how-did-this-go) in tokens to do it, but you could prob
 ## Warnings
 
 **This is an early release.** It has 100% compatibility in every real world project we have
-tested. It should work as a drop in
-replacement for the vast majority of apps. See [Known problems](#known-problems).
+tested. It should work as a drop in replacement for the vast majority of apps. See
+[Known problems](#known-problems).
 
 Also worth mentioning: I've never read a line of this code.
 
-## Install
-
-Be warned, I have no idea if this will actually work.
-
-```sh
-npm install -D tsc-rs
-npx tsc-rs -p tsconfig.json
-```
-
 ## How did this go?
 
-I used a lot of OpenAI models to try and complete this port. In total I did **over $400,000 in API priced tokens with GPT-5.6 Sol and GPT 6 Astra**. They wrote over 1.3m lines of Rust over multiple months of /goal loops and never got past like 84% compat.
+It [cost over $420,000](#how-did-this-go) in tokens to do it, but you could probably have done it
+for ~$20k (see below)
 
-When I saw how little my Claude Code limits were burning, I figured it'd be fun to throw Opus 5.5 at this. It had a working v0 in 10 hours.
+I used a lot of OpenAI models to try and complete this port. In total I did **over $400,000 in API
+priced tokens with GPT-5.6 Sol and GPT 6 Astra**. They wrote over 1.3m lines of Rust over multiple
+months of /goal loops and never got past like 84% compat.
 
-I assumed it kept using the code the Codex models wrote. I was wrong. **Opus 5.5 started from scratch. It got further than Astra in 1/10th the time.**
+When I saw how little my Claude Code limits were burning, I figured it'd be fun to throw Opus 5.5
+at this. It had a working v0 in 10 hours.
 
-I let it keep going, and it definitely did. Total token spend was **~$24,047 of API spend over 2 weeks**. I was using my Claude accounts, and it worked out to somewhere between **925% and 983% of my $200 plan weekly limits**.
+I assumed it kept using the code the Codex models wrote. I was wrong. **Opus 5.5 started from
+scratch. It got further than Astra in 1/10th the time.**
+
+I let it keep going, and it definitely did. Total token spend was **~$24,047 of API spend over 2
+weeks**. I was using my Claude accounts, and it worked out to somewhere between **925% and 983% of
+my $200 plan weekly limits**.
 
 Expensive, for sure, but not that bad considering how much work has went into typescript-go.
 
-# "The Slop Line"
-
-Everything below this was written by my LLMs, not me. 
-
 ## What actually is this?
 
-ts-rust is a direct port of Microsoft's native TypeScript compiler, which is written in Go
-([microsoft/TypeScript](https://github.com/microsoft/TypeScript), formerly
+daavilefx-tsc is a fork of ts-rust, a direct port of Microsoft's native TypeScript compiler, which
+is written in Go ([microsoft/TypeScript](https://github.com/microsoft/TypeScript), formerly
 [typescript-go](https://github.com/microsoft/typescript-go)). It keeps Go's algorithms and
 behavior and has the same command line (`tsc`), language server and API.
 
 ## Install
+
+There is no npm package from this fork. Upstream publishes `tsc-rs` and its platform packages from
+[pingdotgg/ts-rust](https://github.com/pingdotgg/ts-rust/releases); those builds cover Linux x64,
+Linux arm64 and macOS arm64, and they come from upstream's tree, not this one:
 
 ```sh
 npm install -D tsc-rs
@@ -63,9 +99,20 @@ with the `typescript` package. Each [release](https://github.com/pingdotgg/ts-ru
 has a standalone archive per platform: the `tsc` binary with the lib files next to it.
 
 Platforms: Linux x64 (static, any distribution) and macOS arm64. Linux arm64 (static) comes in
-the first release after 0.1.0. Windows is not available yet.
+the first release after 0.1.0. No npm package covers Windows.
 
-To use it in VS Code, see the [npm package README](npm/tsc-rs-readme.md#vs-code).
+For the Windows target this fork cares about, build the compiler here:
+
+```powershell
+cargo build --release --bins
+# target\release\tsgo.exe and target\release\goport.exe
+```
+
+Put `target\release` on PATH, or copy the binaries where you want them. [AGENTS.md](AGENTS.md) has
+the build rules (toolchain, profiles, where to put `target/`).
+
+To use it in VS Code, see the [npm package README](npm/tsc-rs-readme.md#vs-code) — that package is
+upstream's, not this fork's.
 
 ## Effect diagnostics
 
@@ -227,6 +274,9 @@ in `crates/ts_goport/parts`, and uses the lib files in `crates/ts_goport/libs`.
 ./scripts/verify.sh
 ```
 
+The scripts are bash. On Windows call Cargo directly (`cargo build --release --bins`), and keep
+`target/` off the C: drive with `CARGO_TARGET_DIR` — [AGENTS.md](AGENTS.md) has the rules.
+
 The bins are `goport` (type check) and `tsgo` (the Go `tsgo` command line). The Go baseline tests
 run with
 `TS_GO_REPO=/path/to/typescript-go ./scripts/run-cargo-capped.sh test -p ts_goport --test go_baselines`.
@@ -234,20 +284,20 @@ run with
 - Port rules: [crates/ts_goport/PORTING.md](crates/ts_goport/PORTING.md)
 - Measurement and gate scripts: [scripts/goport](scripts/goport/README.md)
 - npm packages and releases: [npm/README.md](npm/README.md)
-- Typechecker work rules: [AGENTS.md](AGENTS.md), the
-  [accountability rules](docs/typechecker-accountability.md) and the
-  [saved state](docs/typechecker-state/current.json)
+- Build and dev rules for this fork: [AGENTS.md](AGENTS.md)
 - How the project started: [docs/history.md](docs/history.md)
 
 ## Releases
 
-Push a tag `v<version>` (for example `v0.1.0`). The
-[release workflow](.github/workflows/release.yml) builds, packs and tests the packages, publishes
-them to npm and creates a GitHub release. A stable version goes to the dist-tag `latest`, and a
-prerelease version (`v0.2.0-beta.1`) to `next` and a GitHub prerelease. See
-[npm/README.md](npm/README.md#tsc-rs-releases).
+Upstream's [release workflow](.github/workflows/release.yml) builds, packs and tests the packages,
+publishes them to npm and creates a GitHub release — from `pingdotgg/ts-rust`. npm trusted
+publishing is bound to that repository ([npm/trust-setup.sh](npm/trust-setup.sh)), and the workflow
+builds no Windows target, so this fork publishes no npm packages yet.
+[npm/README.md](npm/README.md#tsc-rs-releases) documents the process.
 
 ## License
 
-[MIT](LICENSE). The port keeps the licenses and notices of the code it ports: TypeScript
-(Apache-2.0) and parts of the Go standard library (BSD-3-Clause). See [NOTICE.md](NOTICE.md).
+[MIT](LICENSE). This is a fork of pingdotgg/ts-rust and keeps its license: the port is MIT
+(Copyright (c) 2026 T3 Tools Inc.). The port keeps the licenses and notices of the code it ports:
+TypeScript (Apache-2.0) and parts of the Go standard library (BSD-3-Clause). See
+[NOTICE.md](NOTICE.md).
