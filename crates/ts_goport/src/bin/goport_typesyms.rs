@@ -202,8 +202,13 @@ fn relative_path(base: &str, target: &str) -> String {
     parts.join("/")
 }
 
-/// Go `filepath.Abs(filepath.Dir(project))`.
+/// Go `filepath.Abs(filepath.Dir(project))`. Windows paths arrive with
+/// `\` separators, so normalize first; without that `rfind('/')` misses
+/// and the base dir becomes the current directory. A Windows drive path
+/// (`C:/...`) is absolute as-is: unlike a Unix path it takes no leading
+/// `/`, and joining the current directory onto it corrupts every name.
 fn project_dir(project: &str) -> String {
+    let project = project.replace('\\', "/");
     let dir = match project.rfind('/') {
         Some(0) => "/",
         Some(index) => &project[..index],
@@ -211,6 +216,9 @@ fn project_dir(project: &str) -> String {
     };
     if dir.starts_with('/') {
         return format!("/{}", clean_components(dir).join("/"));
+    }
+    if dir.len() >= 2 && dir.as_bytes()[1] == b':' {
+        return clean_components(dir).join("/");
     }
     let cwd = ts_goport::frontend::vfs::os_current_dir().expect("current directory");
     let joined = format!("{cwd}/{dir}");
@@ -253,7 +261,11 @@ fn run(project: &str, out_dir: &str) -> i32 {
             let file_name = source_file_file_name(f);
             let header = relative_path(&dir, file_name);
             Unit {
-                name: header.replace('/', "!"),
+                // Go replaces `/` with `!`. A Windows drive letter would
+                // leave a `:` in the name, which Windows reads as an NTFS
+                // alternate-stream separator (content lands in an invisible
+                // stream, visible file stays empty) — so `:` goes too.
+                name: header.replace(&['/', ':'][..], "!"),
                 header,
                 file: TestFile {
                     unit_name: file_name.to_string(),

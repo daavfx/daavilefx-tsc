@@ -7,6 +7,47 @@ Fork of [`pingdotgg/ts-rust`](https://github.com/pingdotgg/ts-rust), owned by
 **Local:** `F:\ts-rust\daavilefx-tsc`
 **Upstream:** `pingdotgg/ts-rust` (remote `upstream`)
 
+## Status (2026-10-09)
+
+- Phases 0–3 done and pushed (`8cd03f1d`): fork, Windows build proven,
+  de-slop (~52 MB / ~250 files), identity rewrite, 98 branches pruned.
+- Phase 4 done: `scripts/build-windows.ps1` (proven end-to-end),
+  `scripts/daavilefx.ps1` (`check` / `emit` / `typesyms` / `version`,
+  exit codes pass through for gates and harnesses).
+- First fork bug fixed and proven: `goport_typesyms` mangled Windows
+  paths into an empty `..!C` file (bad `project_dir` on backslashes +
+  drive-letter `:` landing in an NTFS alternate stream). Fixed both,
+  `app.ts.types` + `app.ts.symbols` now emit with full type/symbol data.
+- Phase 5 verdict (copytrader_ui, 285 files, tsc 5.8.3 clean):
+  tsgo is **8.1x faster (5.7 s -> 0.7 s)** and its 3 diagnostics are
+  **byte-identical to `tsc --strict`** (same codes, positions, messages;
+  only union member display order differs cosmetically). The strict
+  behavior on a strict-less tsconfig is **upstream TS 6/7 behavior, not a
+  port bug**: strict is true by default since TS 6.0 (#62333, 6.0
+  announcement). Migration = add `"strict": false` (zero code changes,
+  keeps the gate green) or fix the 3 real latent issues found
+  (atlas.tsx double index, SetfileBuilderPage union access,
+  RiskToSizer variance) and go strict.
+
+## Use cases (what this is for)
+
+1. **Quantum app type-check gate.** `daavilefx.ps1 check -p <tsconfig>`
+   replaces `tsc --noEmit` in `scripts/typecheck-core.mjs`. Upstream numbers:
+   62.63 s (tsc 6) / 16.10 s (tsc 7) / 7.25 s (tsc-rs) over five projects.
+2. **Local-LLM verification oracle.** The llama.cpp harness feeds a file or
+   project to `check`, reads `file(line,col): error TSNNNN: message` lines
+   off stdout/stderr, and retries the model with the diagnostics. Exit codes
+   are the contract: 0 clean, 1 type errors, 2 crash/bad input.
+3. **Codebase intelligence.** `daavilefx.ps1 typesyms -p <tsconfig> -o <dir>`
+   dumps `.types` + `.symbols` per file — the RAG / RYIUK-memory substrate,
+   no Node required.
+4. **In-editor diagnostics (later).** `crates/ts_wasm` builds the same
+   compiler as a `wasm32-wasip1` module for the DaavileIDE webview.
+
+Out of scope: bundling (Vite/esbuild keep that job), the vendored Orca fork
+(32,775 TS files we don't own), release-critical-path use before the Phase 5
+dialect verdict (TS 7.1.0-dev vs our TS 5.8.2).
+
 ---
 
 ## 0. Answers to the fork questions

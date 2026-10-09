@@ -6,3 +6,5 @@ __pycache__/
 
 # local build logs (Phase 1 Windows build)
 .build.log*
+.rebuild.log*
+.check.log*
