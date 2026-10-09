@@ -75,3 +75,22 @@ Fork-specific working rules. Compiler porting rules live in
   pin through `scripts/upstream/pin.py`. CI reads `current` from `UPSTREAM.json`.
 - A pin bump is a deliberate act with per-pin evidence (oracle outputs, baselines). Do not bump it
   as part of an unrelated change.
+
+## Public fork / private sauce boundary
+
+This repo is PUBLIC. The DAAVILE engine, RYIUK memory, trading strategies,
+app sources and any data derived from them are PRIVATE and must never land
+here — not in code, not in docs, not in issues, not in `.types`/`.symbols`
+dumps, not in test fixtures, not in example paths. Concretely:
+
+- Never commit: app sources or excerpts, `typesyms`/`files.txt` output from
+  our apps, RYIUK receipts or memory content, strategy/indicator code,
+  API keys, tokens, hostnames, personal paths, screenshots of private apps.
+- Type dumps of our own tree go to a gitignored local dir or to the private
+  repos (`daavfx/quantum-dashboard-fx`, `daavfx/daavilefx-engine`) — never
+  to this checkout.
+- Integration code (gate swaps in `typecheck-core.mjs`, harness wrappers,
+  IDE wiring) lives in the private repos and references this repo's
+  binaries by path. This repo carries the compiler and its Windows
+  tooling only.
+- When in doubt whether something is private, treat it as private and ask.

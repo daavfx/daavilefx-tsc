@@ -8,3 +8,11 @@ __pycache__/
 .build.log*
 .rebuild.log*
 .check.log*
+
+# never commit: private app-derived data (see AGENTS.md boundary rule)
+dist/
+typesyms-out/
+daavilefx-dumps/
+*.types
+*.symbols
+files.txt
