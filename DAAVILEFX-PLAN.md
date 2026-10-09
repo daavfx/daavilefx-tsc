@@ -43,6 +43,11 @@ Fork of [`pingdotgg/ts-rust`](https://github.com/pingdotgg/ts-rust), owned by
    no Node required.
 4. **In-editor diagnostics (later).** `crates/ts_wasm` builds the same
    compiler as a `wasm32-wasip1` module for the DaavileIDE webview.
+   PROVEN 2026-10-09: `scripts/wasm/build.sh` runs under Git Bash
+   (`WASM_OPT=none` without binaryen) → 5.77 MB module (1.75 MB brotli);
+   the repo's own `npm/wasm` loader type-checks in-memory projects in
+   Node with correct diagnostics and exit codes (smoke test, module
+   removed afterwards — rebuild with build.sh).
 
 Out of scope: bundling (Vite/esbuild keep that job), the vendored Orca fork
 (32,775 TS files we don't own), release-critical-path use before the Phase 5
